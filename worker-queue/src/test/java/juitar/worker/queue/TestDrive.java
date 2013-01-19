@@ -12,13 +12,13 @@ public class TestDrive {
     public static void main(String... args) throws InterruptedException {
 
         WorkQueue queue = new WorkQueue();
-        WorkerService service = new WorkerService(queue);
-        service.start(2);
+        WorkerQueueService queueService = new WorkerQueueService(queue);
+        queueService.start(2);
 
         for (int i = 0; i < 100; i++) {
             queue.submit(new Work(UUID.randomUUID().toString(), "payload", new ResultChannelImpl()));
         }
 
-        service.stop(3, TimeUnit.SECONDS);
+        queueService.stop(3, TimeUnit.SECONDS);
     }
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author sha1n
  * Date: 1/19/13
  */
-public class WorkerService {
+public class WorkerQueueService {
 
     private static class WorkerThreadFactory implements ThreadFactory {
 
@@ -30,7 +30,7 @@ public class WorkerService {
     private final WorkQueue queue;
     private AtomicBoolean started;
 
-    public WorkerService(WorkQueue queue) {
+    public WorkerQueueService(WorkQueue queue) {
         this.queue = queue;
     }
 
