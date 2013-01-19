@@ -20,7 +20,7 @@ class ServiceBoundWorker implements Runnable {
 
     @Override
     public final void run() {
-        while (serviceStarted.get()) {
+        while (serviceStarted.get() && !Thread.interrupted()) {
             try {
                 Work work = queue.take();
 
