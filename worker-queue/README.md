@@ -11,7 +11,7 @@ Code sample
 
     // Create a worker queue service
     WorkerQueueService queueService = new WorkerQueueService(queue, new WorkerFactoryImpl());
-    // Start the service
+    // Start the service with two worker threads
     queueService.start(2);
 
     // Submit some work
