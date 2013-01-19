@@ -27,22 +27,24 @@ public class WorkerQueueService {
     }
 
     private ExecutorService executorService;
+    private final WorkerFactory workerFactory;
     private final WorkQueue queue;
     private AtomicBoolean started;
 
-    public WorkerQueueService(WorkQueue queue) {
+    public WorkerQueueService(WorkQueue queue, WorkerFactory workerFactory) {
         this.queue = queue;
+        this.workerFactory = workerFactory;
     }
 
-    public void start(final int workers) {
-        executorService = Executors.newFixedThreadPool(workers);
+    public final void start(final int workers) {
+        executorService = Executors.newFixedThreadPool(workers, new WorkerThreadFactory());
         started = new AtomicBoolean(true);
         for (int i = 0; i < workers; i++) {
-            executorService.execute(new WorkerImpl(queue, started));
+            executorService.execute(new ServiceBoundWorker(workerFactory.createWorker(), queue, started));
         }
     }
 
-    public void stop(long timeout, TimeUnit timeUnit) throws InterruptedException {
+    public final void stop(long timeout, TimeUnit timeUnit) throws InterruptedException {
         started.set(false);
         if (executorService != null) {
             executorService.shutdown();

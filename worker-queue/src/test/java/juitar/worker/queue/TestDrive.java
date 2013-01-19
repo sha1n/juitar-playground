@@ -12,7 +12,7 @@ public class TestDrive {
     public static void main(String... args) throws InterruptedException {
 
         WorkQueue queue = new WorkQueue();
-        WorkerQueueService queueService = new WorkerQueueService(queue);
+        WorkerQueueService queueService = new WorkerQueueService(queue, new WorkerFactoryImpl());
         queueService.start(2);
 
         for (int i = 0; i < 100; i++) {

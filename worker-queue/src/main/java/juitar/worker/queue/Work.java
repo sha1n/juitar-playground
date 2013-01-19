@@ -10,21 +10,21 @@ public class Work {
     private final String payload;
     private final ResultChannel resultChannel;
 
-    public Work(String id, String payload, ResultChannel resultChannel) {
+    public Work(final String id, final String payload, final ResultChannel resultChannel) {
         this.id = id;
         this.payload = payload;
         this.resultChannel = resultChannel;
     }
 
-    public String getId() {
+    public final String getId() {
         return id;
     }
 
-    public String getPayload() {
+    public final String getPayload() {
         return payload;
     }
 
-    public ResultChannel getResultChannel() {
+    public final ResultChannel getResultChannel() {
         return resultChannel;
     }
 

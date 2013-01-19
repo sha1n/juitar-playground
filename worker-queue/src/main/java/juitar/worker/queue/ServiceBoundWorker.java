@@ -6,24 +6,25 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author sha1n
  * Date: 1/19/13
  */
-public class WorkerImpl implements Worker {
+class ServiceBoundWorker implements Runnable {
 
     private final WorkQueue queue;
     private final AtomicBoolean serviceStarted;
+    private final Worker worker;
 
-    public WorkerImpl(final WorkQueue queue, final AtomicBoolean serviceStarted) {
+    public ServiceBoundWorker(final Worker worker, final WorkQueue queue, final AtomicBoolean serviceStarted) {
+        this.worker = worker;
         this.queue = queue;
         this.serviceStarted = serviceStarted;
     }
 
     @Override
-    public void run() {
+    public final void run() {
         while (serviceStarted.get()) {
             try {
                 Work work = queue.take();
 
-                Result result = new Result(work.getId());
-                result.setResultData("data-" + work.getId());
+                Result result = worker.doWork(work);
 
                 work.getResultChannel().send(result);
             } catch (Throwable e) {
