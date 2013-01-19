@@ -20,15 +20,17 @@ class ServiceBoundWorker implements Runnable {
 
     @Override
     public final void run() {
-        while (serviceStarted.get() && !Thread.interrupted()) {
+        while (serviceStarted.get()) {
             try {
                 Work work = queue.take();
 
                 Result result = worker.doWork(work);
 
                 work.getResultChannel().send(result);
+            } catch (InterruptedException e) {
+                System.out.println("Worker thread interrupted.");
+                Thread.currentThread().interrupt(); // Reset interrupted state.
             } catch (Throwable e) {
-                e.printStackTrace();
             }
         }
     }
