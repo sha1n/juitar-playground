@@ -2,6 +2,7 @@ package juitar.worker.jdbc;
 
 import juitar.worker.queue.Worker;
 import juitar.worker.queue.WorkerFactory;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ public class JdbcBatchWorkerFactory implements WorkerFactory {
 
     private JdbcTemplate jdbcTemplate;
 
+    @Required
     public final void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

@@ -7,10 +7,6 @@
         <property name="location" value="jdbc.properties"/>
     </bean>
 
-    <bean id="batchWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
-    </bean>
-
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -23,5 +19,16 @@
         <property name="user" value="${user}"/>
         <property name="password" value="${password}"/>
         <property name="maxConnections" value="10"/>
+    </bean>
+
+    <bean id="jdbcBatchQueue" class="juitar.worker.queue.WorkQueue"/>
+    <bean id="jdbcWorkerQueueServiceRegistry" class="juitar.worker.queue.WorkerQueueServiceRegistryImpl"/>
+    <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <qualifier value="batchWorker"/>
+    </bean>
+
+    <bean id="jdbcBatchService" class="juitar.worker.jdbc.JdbcBatchService">
+        <property name="workers" value="3"/>
     </bean>
 </beans>

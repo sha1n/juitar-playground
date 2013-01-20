@@ -30,7 +30,7 @@ public class TwoPhasePipelineSystemExample {
         twoPhasePipelineSystemExample.stop();
     }
 
-    private WorkerQueueServiceRegistry serviceRegistry = new WorkerQueueServiceRegistry();
+    private WorkerQueueServiceRegistryImpl serviceRegistry = new WorkerQueueServiceRegistryImpl();
     private final WorkQueue phase1Queue = new WorkQueue();
     private final WorkQueue phase2Queue = new WorkQueue();
 
