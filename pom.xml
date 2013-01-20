@@ -9,6 +9,7 @@
     <version>1.0</version>
     <modules>
         <module>worker-queue</module>
+        <module>jdbc-worker</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,6 +32,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.2</version>
+            </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
