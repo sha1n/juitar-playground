@@ -1,5 +1,6 @@
 package juitar.worker.jdbc;
 
+import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,6 +39,7 @@ public class JdbcBatchService {
         this.workers = workers;
     }
 
+    @Monitored
     public void executeUpdate(String updateStatement, ResultChannel resultChannel) {
         statementQueue.add(updateStatement);
 
