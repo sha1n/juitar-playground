@@ -21,8 +21,9 @@ public class MonitoringAspect {
     public void executeMonitored() {
     }
 
+
     @Around("executeMonitored()")
-    public void aroundMonitoredMethod(final ProceedingJoinPoint pjp) throws Throwable {
+    public Object aroundMonitoredMethod(final ProceedingJoinPoint pjp) throws Throwable {
 
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
@@ -31,11 +32,14 @@ public class MonitoringAspect {
 
         methodMonitor.before(monitored);
 
+        Object returnObject = null;
         try {
-            pjp.proceed();
+            returnObject = pjp.proceed();
         } finally {
             methodMonitor.after(monitored);
         }
+
+        return returnObject;
 
     }
 
