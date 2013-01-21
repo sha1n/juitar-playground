@@ -1,5 +1,6 @@
 package juitar.worker.jdbc;
 
+import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.Result;
 import juitar.worker.queue.Work;
 import juitar.worker.queue.Worker;
@@ -17,6 +18,7 @@ public class JdbcBatchWorker implements Worker {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Monitored(threshold = 1)
     @Override
     public Result doWork(Work work) {
 
