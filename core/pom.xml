@@ -20,38 +20,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.4</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <aspectLibraries>
-                        <aspectLibrary>
-                            <groupId>juitar</groupId>
-                            <artifactId>monitors</artifactId>
-                            <!--<version>${project.version}</version>-->
-                        </aspectLibrary>
-                    </aspectLibraries>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjtools</artifactId>
-                        <version>1.7.1</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 

@@ -7,11 +7,17 @@
     <groupId>juitar</groupId>
     <artifactId>juitar</artifactId>
     <version>1.0</version>
-    <modules>
-        <module>infra</module>
-        <module>core</module>
-    </modules>
+    <!--<modules>-->
+    <!--<module>infra</module>-->
+    <!--<module>core</module>-->
+    <!--</modules>-->
     <packaging>pom</packaging>
+
+    <properties>
+        <aspectj.version>1.7.1</aspectj.version>
+        <project.build.source>1.7</project.build.source>
+        <project.build.target>1.7</project.build.target>
+    </properties>
 
     <build>
         <plugins>
@@ -20,10 +26,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <compilerVersion>1.7</compilerVersion>
+                    <compilerVersion>${project.build.source}</compilerVersion>
                     <fork>true</fork>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${project.build.source}</source>
+                    <target>${project.build.target}</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -35,69 +41,97 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-            <!--<groupId>org.codehaus.mojo</groupId>-->
-            <!--<artifactId>aspectj-maven-plugin</artifactId>-->
-            <!--<version>1.4</version>-->
-            <!--<configuration>-->
-            <!--<encoding>UTF-8</encoding>-->
-            <!--<source>1.7</source>-->
-            <!--<target>1.7</target>-->
-            <!--<aspectLibraries>-->
-            <!--<aspectLibrary>-->
-            <!--<groupId>juitar</groupId>-->
-            <!--<artifactId>monitors</artifactId>-->
-            <!--<version>${project.version}</version>-->
-            <!--</aspectLibrary>-->
-            <!--</aspectLibraries>-->
-            <!--</configuration>-->
-            <!--<dependencies>-->
-            <!--<dependency>-->
-            <!--<groupId>org.aspectj</groupId>-->
-            <!--<artifactId>aspectjtools</artifactId>-->
-            <!--<version>1.7.1</version>-->
-            <!--</dependency>-->
-            <!--</dependencies>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<goals>-->
-            <!--<goal>compile</goal>-->
-            <!--&lt;!&ndash; use this goal to weave all your main classes &ndash;&gt;-->
-            <!--<goal>test-compile</goal>-->
-            <!--&lt;!&ndash; use this goal to weave all your test classes &ndash;&gt;-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.1</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <profiles>
+        <profile>
+            <id>infra</id>
+            <modules>
+                <module>infra</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>aspects</id>
+
+            <modules>
+                <module>core</module>
+            </modules>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>aspectj-maven-plugin</artifactId>
+                        <version>1.4</version>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <source>${project.build.source}</source>
+                            <target>${project.build.target}</target>
+                            <complianceLevel>${project.build.source}</complianceLevel>
+                            <Xlint>ignore</Xlint>
+                            <showWeaveInfo>true</showWeaveInfo>
+                            <aspectLibraries>
+                                <aspectLibrary>
+                                    <groupId>juitar</groupId>
+                                    <artifactId>monitors</artifactId>
+                                </aspectLibrary>
+                            </aspectLibraries>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.aspectj</groupId>
+                                <artifactId>aspectjrt</artifactId>
+                                <version>${aspectj.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.aspectj</groupId>
+                                <artifactId>aspectjtools</artifactId>
+                                <version>${aspectj.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>compile</goal>
+                                    <goal>test-compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+            <dependencies>
+                <dependency>
+                    <groupId>juitar</groupId>
+                    <artifactId>monitors</artifactId>
+                    <version>${project.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
-                <version>1.7.1</version>
+                <version>${aspectj.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
-                <version>1.7.1</version>
+                <version>${aspectj.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.slf4j</groupId>
