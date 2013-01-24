@@ -6,5 +6,7 @@ package juitar.worker.queue;
  */
 public interface ResultChannel {
 
-    void send(Result result);
+    void onSuccess(Result result);
+
+    void onFailure(Result result, Exception e);
 }

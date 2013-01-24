@@ -26,7 +26,7 @@ class ServiceBoundWorker implements Runnable {
 
                 Result result = worker.doWork(work);
 
-                work.getResultChannel().send(result);
+                work.getResultChannel().onSuccess(result);
             } catch (InterruptedException e) {
                 System.out.println("Worker thread interrupted.");
                 Thread.currentThread().interrupt(); // Reset interrupted state.

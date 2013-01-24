@@ -19,8 +19,13 @@ public class TwoPhasePipelineSystemExample {
         for (int i = 0; i < 2; i++) {
             twoPhasePipelineSystemExample.phase1Queue.submit(new Work(UUID.randomUUID().toString(), "payload", new ResultChannel() {
                 @Override
-                public void send(Result result) {
+                public void onSuccess(Result result) {
                     twoPhasePipelineSystemExample.phase2Queue.submit(new Work(UUID.randomUUID().toString(), "payload", new ResultChannelImpl()));
+                }
+
+                @Override
+                public void onFailure(Result result, Exception e) {
+                    throw new RuntimeException(e);
                 }
             }));
         }

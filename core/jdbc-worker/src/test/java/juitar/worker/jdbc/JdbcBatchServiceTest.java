@@ -30,11 +30,20 @@ public class JdbcBatchServiceTest {
         for (int i = 0; i < 10; i++) {
             service.executeUpdate("INSERT INTO TEST VALUES (1, 'str')", new ResultChannel() {
                 @Override
-                public void send(Result result) {
+                public void onSuccess(Result result) {
                     value.set(result.getWorkId());
                     synchronized (lock) {
                         lock.notifyAll();
                     }
+                }
+
+                @Override
+                public void onFailure(Result result, Exception e) {
+                    e.printStackTrace();
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+
                 }
             });
         }

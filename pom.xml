@@ -7,10 +7,6 @@
     <groupId>juitar</groupId>
     <artifactId>juitar</artifactId>
     <version>1.0</version>
-    <!--<modules>-->
-    <!--<module>infra</module>-->
-    <!--<module>core</module>-->
-    <!--</modules>-->
     <packaging>pom</packaging>
 
     <properties>
@@ -52,10 +48,13 @@
             </modules>
         </profile>
         <profile>
-            <id>aspects</id>
+            <id>application</id>
 
             <modules>
                 <module>core</module>
+                <module>web</module>
+                <module>launcher</module>
+
             </modules>
 
             <build>
@@ -138,6 +137,28 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.2</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.netty</groupId>
+                <artifactId>netty</artifactId>
+                <version>3.2.8.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
+                <version>1.9.1</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>junit</groupId>

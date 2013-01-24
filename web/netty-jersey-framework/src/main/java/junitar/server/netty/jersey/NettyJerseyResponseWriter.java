@@ -1,0 +1,93 @@
+package junitar.server.netty.jersey;
+
+import com.sun.jersey.api.JResponse;
+import com.sun.jersey.api.JResponseAsResponse;
+import com.sun.jersey.spi.container.ContainerResponse;
+import com.sun.jersey.spi.container.ContainerResponseWriter;
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBufferOutputStream;
+import org.jboss.netty.buffer.ChannelBuffers;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFutureListener;
+import org.jboss.netty.handler.codec.http.DefaultHttpResponse;
+import org.jboss.netty.handler.codec.http.HttpResponse;
+import org.jboss.netty.handler.codec.http.HttpResponseStatus;
+import org.jboss.netty.handler.codec.http.HttpVersion;
+
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * @author sha1n
+ * Date: 1/22/13
+ */
+public class NettyJerseyResponseWriter implements ContainerResponseWriter {
+
+    private final Channel channel;
+    private HttpResponse httpResponse;
+    private volatile boolean asyncResponse = false;
+
+    public NettyJerseyResponseWriter(final Channel channel) {
+        this.channel = channel;
+    }
+
+    public final OutputStream writeStatusAndHeaders(final long contentLength, final ContainerResponse containerResponse) throws IOException {
+
+        httpResponse = new DefaultHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.valueOf(containerResponse.getStatus()));
+        List<String> values = new ArrayList<>();
+        Set<Map.Entry<String, List<Object>>> headers = containerResponse.getHttpHeaders().entrySet();
+        for (Map.Entry<String, List<Object>> header : headers) {
+            for (Object value : header.getValue()) {
+                values.add(ContainerResponse.getHeaderValue(value));
+            }
+            httpResponse.setHeader(header.getKey(), values);
+            values.clear();
+        }
+
+        ChannelBuffer buffer = ChannelBuffers.dynamicBuffer();
+        httpResponse.setContent(buffer);
+
+        handleAsync(containerResponse);
+
+        return new ChannelBufferOutputStream(buffer);
+
+    }
+
+    private void handleAsync(final ContainerResponse containerResponse) {
+
+        Response response = containerResponse.getResponse();
+        if (response instanceof JResponseAsResponse) {
+            JResponse<?> jResponse = ((JResponseAsResponse) containerResponse.getResponse()).getJResponse();
+            if (jResponse instanceof AsyncWorkerResponse) {
+                this.asyncResponse = true;
+                AsyncWorkerResponse asyncWorkerResponse = (AsyncWorkerResponse) jResponse;
+                asyncWorkerResponse.submitWork(new AsyncCompletionCallback() {
+
+                    @Override
+                    public void onSuccess() {
+                        channel.write(httpResponse).addListener(ChannelFutureListener.CLOSE);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        channel.write(httpResponse).addListener(ChannelFutureListener.CLOSE);
+                    }
+                });
+
+            }
+        }
+    }
+
+    public final void finish() throws IOException {
+        if (!asyncResponse) {
+            channel.write(httpResponse).addListener(ChannelFutureListener.CLOSE);
+        }
+    }
+
+
+}

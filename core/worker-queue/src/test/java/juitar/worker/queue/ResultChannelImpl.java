@@ -6,7 +6,12 @@ package juitar.worker.queue;
  */
 public class ResultChannelImpl implements ResultChannel {
     @Override
-    public void send(Result result) {
+    public void onSuccess(Result result) {
         System.out.println(result);
+    }
+
+    @Override
+    public void onFailure(Result result, Exception e) {
+        e.printStackTrace();
     }
 }
