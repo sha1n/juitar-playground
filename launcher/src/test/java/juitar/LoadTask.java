@@ -9,13 +9,21 @@ import com.sun.jersey.api.client.WebResource;
  * Date: 1/24/13
  */
 public class LoadTask implements Runnable {
+
+
+    private final int requests;
+
+    public LoadTask(int requests) {
+        this.requests = requests;
+    }
+
     @Override
     public void run() {
         try {
 
             Client client = Client.create();
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < requests; i++) {
                 issueRequest(client);
             }
 

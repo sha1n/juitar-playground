@@ -12,14 +12,43 @@ public class LoadClient {
 
     public static void main(String... args) throws InterruptedException {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(100);
+        if (args.length != 4) {
+            usage();
+        }
 
-        for (int i = 0; i < 100; i++) {
-            executorService.execute(new LoadTask());
+        int threads = 0;
+        int requests = 0;
+        try {
+            switch (args[0]) {
+                case "t":
+                    threads = Integer.parseInt(args[1]);
+                    requests = Integer.parseInt(args[3]);
+                    break;
+                case "r":
+                    requests = Integer.parseInt(args[1]);
+                    threads = Integer.parseInt(args[3]);
+                    break;
+                default:
+                    usage();
+                    break;
+            }
+        } catch (NumberFormatException e) {
+            usage();
+        }
+
+        System.out.println("Running " + threads + " threads each issues " + requests + " requests");
+        ExecutorService executorService = Executors.newFixedThreadPool(threads);
+
+        for (int i = 0; i < threads; i++) {
+            executorService.execute(new LoadTask(requests));
         }
 
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.SECONDS);
+    }
+
+    private static void usage() {
+        System.out.println("USAGE: t <threads> r <requests-per-thread>");
     }
 
 }
