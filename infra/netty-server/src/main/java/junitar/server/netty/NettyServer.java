@@ -60,8 +60,8 @@ public class NettyServer {
     private ServerBootstrap initialize() {
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
+                        Executors.newFixedThreadPool(2),
+                        Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2)));
 
         bootstrap.setPipelineFactory(pipelineFactory);
 

@@ -45,7 +45,7 @@ public class AsyncWorkerResource {
         Work work = new Work(UUID.randomUUID().toString(), "Work Item", new ResultChannel() {
             @Override
             public void onSuccess(Result result) {
-                System.out.println("Result received: " + result.getResultData());
+//                System.out.println("Result received: " + result.getResultData());
             }
 
             @Override
