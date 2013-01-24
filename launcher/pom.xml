@@ -39,6 +39,20 @@
             <artifactId>rest</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>juitar</groupId>
+            <artifactId>monitors</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>com.sun.jersey</groupId>

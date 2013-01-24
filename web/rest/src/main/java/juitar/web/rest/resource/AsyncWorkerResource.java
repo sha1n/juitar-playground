@@ -1,5 +1,6 @@
 package juitar.web.rest.resource;
 
+import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.*;
 import junitar.server.netty.jersey.AsyncWorkerResponse;
 import junitar.server.netty.jersey.AsyncWorkerResponseBuilder;
@@ -41,6 +42,7 @@ public class AsyncWorkerResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
+    @Monitored(threshold = 3)
     public AsyncWorkerResponse get() {
         Work work = new Work(UUID.randomUUID().toString(), "Work Item", new ResultChannel() {
             @Override
@@ -55,7 +57,7 @@ public class AsyncWorkerResource {
             }
         });
 
-        AsyncWorkerResponseBuilder asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder(queue, work);
+        AsyncWorkerResponseBuilder<String> asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder<>(queue, work);
         asyncWorkerResponseBuilder.entity("Entity");
 
         AsyncWorkerResponse asyncWorkerResponse = asyncWorkerResponseBuilder.build();
