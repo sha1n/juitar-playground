@@ -21,9 +21,10 @@ public class MethodTimeMonitor extends AbstractMethodMonitor {
     protected void internAfter(Monitored monitored, Context ctx) {
         long elapsed = System.currentTimeMillis() - start;
         if (monitored.threshold() < elapsed) {
-            throw new TimeoutException();
+            throw new TimeoutException(
+                    "Threshold '" + monitored.threshold() + "' exceeded. Elapsed=" + elapsed);
         }
-        System.out.println("Elapsed: " + elapsed);
+//        System.out.println("Elapsed: " + elapsed);
     }
 
 }

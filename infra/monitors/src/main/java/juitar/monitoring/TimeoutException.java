@@ -5,4 +5,7 @@ package juitar.monitoring;
  * Date: 1/3/13
  */
 public class TimeoutException extends RuntimeException {
+    public TimeoutException(String message) {
+        super(message);
+    }
 }

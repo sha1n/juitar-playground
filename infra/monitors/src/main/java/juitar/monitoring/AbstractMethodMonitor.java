@@ -18,7 +18,7 @@ abstract class AbstractMethodMonitor implements MethodMonitor {
     @Override
     public final void before(Monitored monitored) {
         Context context = new ContextAccess().getContext();
-        System.out.println("Before " + context.getCorrelationId());
+//        System.out.println("Before " + context.getCorrelationId());
 
         internBefore(monitored, context);
     }
@@ -29,6 +29,6 @@ abstract class AbstractMethodMonitor implements MethodMonitor {
 
         internAfter(monitored, context);
 
-        System.out.println("After " + context.getCorrelationId());
+//        System.out.println("After " + context.getCorrelationId());
     }
 }
