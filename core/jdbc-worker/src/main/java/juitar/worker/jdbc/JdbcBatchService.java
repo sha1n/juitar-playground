@@ -15,8 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class JdbcBatchService {
 
-    @Autowired
-    private WorkQueue queue;
+    private final WorkQueue queue;
 
     @Autowired
     private WorkerQueueServiceRegistry workerServiceRegistry;
@@ -26,21 +25,26 @@ public class JdbcBatchService {
     private WorkerFactory workerFactory;
 
     private WorkerQueueService workerQueueService;
-    private int workers = 1;
+    private int workers = Runtime.getRuntime().availableProcessors();
     private Queue<String> statementQueue = new ConcurrentLinkedQueue<>();
 
+    @Autowired
+    public JdbcBatchService(WorkQueue queue) {
+        this.queue = queue;
+    }
+
     @PostConstruct
-    public void init() {
+    public final void init() {
         workerQueueService = workerServiceRegistry.registerQueueService(queue, workerFactory);
         workerQueueService.start(workers);
     }
 
-    public void setWorkers(int workers) {
+    public final void setWorkers(int workers) {
         this.workers = workers;
     }
 
     @Monitored
-    public void executeUpdate(String updateStatement, ResultChannel resultChannel) {
+    public final void executeUpdate(String updateStatement, ResultChannel resultChannel) {
         statementQueue.add(updateStatement);
 
         if (statementQueue.size() >= 10) {
