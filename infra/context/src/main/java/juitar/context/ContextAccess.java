@@ -10,8 +10,8 @@ public class ContextAccess {
 
     private static ApplicationContext applicationContext = null;
 
-    public static void setApplicationContext(ApplicationContext applicationContext) {
-        if (ContextAccess.applicationContext != null) {
+    static void setApplicationContext(ApplicationContext applicationContext) {
+        if (ContextAccess.applicationContext != null && applicationContext != null) {
             throw new UnsupportedOperationException("Context already set.");
         }
         ContextAccess.applicationContext = applicationContext;

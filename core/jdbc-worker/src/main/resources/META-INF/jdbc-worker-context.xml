@@ -12,7 +12,7 @@
     <context:annotation-config/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="jdbc.properties"/>
+        <property name="location" value="META-INF/jdbc.properties"/>
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -37,14 +37,12 @@
     </bean>
 
     <bean id="jdbcBatchService" class="juitar.worker.jdbc.JdbcBatchService">
-        <constructor-arg>
-            <ref bean="jdbcBatchQueue"/>
-        </constructor-arg>
+        <constructor-arg ref="jdbcBatchQueue"/>
         <property name="workers" value="2"/>
     </bean>
 
     <jdbc:embedded-database id="dataSource" type="HSQL">
-        <jdbc:script location="classpath:schema.sql"/>
+        <jdbc:script location="classpath:META-INF/schema.sql"/>
     </jdbc:embedded-database>
 
 </beans>

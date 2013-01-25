@@ -15,7 +15,7 @@ class SpringContextLoader {
 
     GenericApplicationContext load() throws IOException {
         PathMatchingResourcePatternResolver pmrl = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
-        Resource[] resources = pmrl.getResources("classpath*:/*-context.xml");
+        Resource[] resources = pmrl.getResources("classpath*:META-INF/*-context.xml");
 
         GenericApplicationContext applicationContext = new GenericApplicationContext();
         for (Resource r : resources) {

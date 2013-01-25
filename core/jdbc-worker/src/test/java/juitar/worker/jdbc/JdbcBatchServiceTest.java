@@ -16,16 +16,16 @@ import java.util.concurrent.atomic.AtomicReference;
  * Date: 1/20/13
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:jdbc-worker-context.xml", "classpath:test-context.xml"})
+@ContextConfiguration(locations = {"classpath:META-INF/jdbc-worker-context.xml", "classpath:META-INF/test-context.xml"})
 public class JdbcBatchServiceTest {
 
     @Autowired
     JdbcBatchService service;
+    final Object lock = new Object();
 
     @Test
     public void testBasic() throws InterruptedException {
         final AtomicReference<String> value = new AtomicReference<>();
-        final Object lock = new Object();
 
         for (int i = 0; i < 10; i++) {
             service.executeUpdate("INSERT INTO TEST VALUES (1, 'str')", new ResultChannel() {

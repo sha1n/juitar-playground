@@ -43,7 +43,7 @@ public class JdbcBatchService {
         this.workers = workers;
     }
 
-    @Monitored
+    @Monitored(threshold = 10)
     public final void executeUpdate(String updateStatement, ResultChannel resultChannel) {
         statementQueue.add(updateStatement);
 
