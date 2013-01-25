@@ -3,10 +3,13 @@ package junitar.server.netty;
 import com.sun.jersey.api.container.ContainerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
+import juitar.context.ContextAccess;
 import junitar.server.netty.jersey.HttpChannelPipelineFactory;
 import junitar.server.netty.jersey.NettyJerseyHandler;
 import org.jboss.netty.channel.ChannelPipelineFactory;
+import org.springframework.context.support.GenericApplicationContext;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,8 +19,30 @@ import java.util.Map;
  */
 public class NettyJerseyServer {
 
-    public static final void main(String... args) {
+    private GenericApplicationContext applicationContext;
+    private NettyServer nettyServer;
 
+    public static final void main(String... args) throws IOException {
+        NettyJerseyServer server = new NettyJerseyServer();
+        server.start();
+    }
+
+    private void start() throws IOException {
+
+        initApplicationContext();
+        initNettyServer();
+
+        applicationContext.start();
+        nettyServer.start();
+    }
+
+    private void initApplicationContext() throws IOException {
+        applicationContext = new SpringContextLoader().load();
+        applicationContext.refresh();
+        ContextAccess.setApplicationContext(applicationContext);
+    }
+
+    private void initNettyServer() {
         final Map<String, Object> props = new HashMap<>();
         props.put(PackagesResourceConfig.PROPERTY_PACKAGES, "juitar.web.rest.resource");
         props.put(NettyJerseyHandler.RESOURCE_CONFIG_BASE_URI, "/api");
@@ -26,8 +51,14 @@ public class NettyJerseyServer {
         NettyJerseyHandler jerseyHandler = ContainerFactory.createContainer(NettyJerseyHandler.class, resourceConfig);
         ChannelPipelineFactory channelPipelineFactory = new HttpChannelPipelineFactory(jerseyHandler);
 
-        NettyServer nettyServer = new NettyServer(channelPipelineFactory, 8080);
+        nettyServer = new NettyServer(channelPipelineFactory, 8080);
+    }
 
-        nettyServer.start();
+    private void stop() {
+        try {
+            applicationContext.stop();
+        } finally {
+            nettyServer.stop();
+        }
     }
 }
