@@ -1,13 +1,13 @@
 package juitar.web.rest.resource;
 
+import juitar.context.ContextAccess;
 import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.*;
 import junitar.server.netty.jersey.AsyncWorkerResponse;
 import junitar.server.netty.jersey.AsyncWorkerResponseBuilder;
+import org.springframework.context.ApplicationContext;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.UUID;
 
@@ -18,11 +18,11 @@ import java.util.UUID;
 @Path("/async")
 public class AsyncWorkerResource {
 
-    private static final WorkQueue queue = new WorkQueue();
+    private static final WorkQueue QUEUE = new WorkQueueImpl();
     private static final WorkerQueueServiceRegistryImpl workerQueueServiceReg = new WorkerQueueServiceRegistryImpl();
 
     static {
-        workerQueueServiceReg.registerQueueService(queue, new WorkerFactory() {
+        workerQueueServiceReg.registerQueueService(QUEUE, new WorkerFactory() {
             @Override
             public Worker createWorker() {
                 return new Worker() {
@@ -36,7 +36,7 @@ public class AsyncWorkerResource {
             }
         });
 
-        WorkerQueueService workerQueueService = workerQueueServiceReg.getWorkerQueueService(queue);
+        WorkerQueueService workerQueueService = workerQueueServiceReg.getWorkerQueueService(QUEUE);
         workerQueueService.start(4);
     }
 
@@ -57,11 +57,45 @@ public class AsyncWorkerResource {
             }
         });
 
-        AsyncWorkerResponseBuilder<String> asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder<>(queue, work);
+        AsyncWorkerResponseBuilder<String> asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder<>(QUEUE, work);
         asyncWorkerResponseBuilder.entity("Entity");
 
         AsyncWorkerResponse asyncWorkerResponse = asyncWorkerResponseBuilder.build();
 
+
+        return asyncWorkerResponse;
+    }
+
+    @PUT
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Path("/sql")
+//    @Monitored(threshold = 3)
+    public AsyncWorkerResponse submit(String sql) {
+
+        ApplicationContext applicationContext = ContextAccess.getApplicationContext();
+        WorkQueue jdbcBatchQueue = (WorkQueue) applicationContext.getBean("jdbcBatchQueue");
+
+        Work work = new Work(UUID.randomUUID().toString(),
+                new String[]{sql},
+                new ResultChannel() {
+                    @Override
+                    public void onSuccess(Result result) {
+                        System.out.println("Result received: " + result.getResultData());
+                    }
+
+                    @Override
+                    public void onFailure(Result result, Exception e) {
+                        e.printStackTrace();
+                        System.out.println("Execution failed: " + result);
+                    }
+                });
+
+        AsyncWorkerResponseBuilder<String> asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder<>(
+                jdbcBatchQueue,
+                work);
+
+        asyncWorkerResponseBuilder.entity("Entity");
+        AsyncWorkerResponse asyncWorkerResponse = asyncWorkerResponseBuilder.build();
 
         return asyncWorkerResponse;
     }

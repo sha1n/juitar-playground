@@ -36,8 +36,8 @@ public class TwoPhasePipelineSystemExample {
     }
 
     private WorkerQueueServiceRegistryImpl serviceRegistry = new WorkerQueueServiceRegistryImpl();
-    private final WorkQueue phase1Queue = new WorkQueue();
-    private final WorkQueue phase2Queue = new WorkQueue();
+    private final WorkQueue phase1Queue = new WorkQueueImpl();
+    private final WorkQueue phase2Queue = new WorkQueueImpl();
 
     public void start() {
         WorkerQueueService phase1QueueService = serviceRegistry.registerQueueService(phase1Queue, new WorkerFactoryImpl());

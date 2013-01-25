@@ -31,6 +31,7 @@ class ServiceBoundWorker implements Runnable {
                 System.out.println("Worker thread interrupted.");
                 Thread.currentThread().interrupt(); // Reset interrupted state.
             } catch (Throwable e) {
+                e.printStackTrace();
             }
         }
     }
