@@ -4,7 +4,9 @@ netty-jersey-framework
 This module provides basic Jersey integration on top of Netty and experimental support for asynchronous Response implementation,
 for use with an asynchronous worker queue design.
 
-Sample @GET method using the AsyncWorkerResponse:
+Sample @GET method using the AsyncWorkerResponse
+------------------------------------------------
+The entity itself is still not retrieved from the worker... it's written by the resource method out of the worker context.
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
