@@ -18,7 +18,7 @@ public class JdbcBatchWorker implements Worker {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Monitored(threshold = 1)
+    @Monitored(threshold = 3)
     @Override
     public Result doWork(Work work) {
 
