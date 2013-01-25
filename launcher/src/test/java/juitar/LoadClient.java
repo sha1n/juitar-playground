@@ -40,7 +40,7 @@ public class LoadClient {
         ExecutorService executorService = Executors.newFixedThreadPool(threads);
 
         for (int i = 0; i < threads; i++) {
-            executorService.execute(new LoadTask(requests));
+            executorService.execute(new PutTask(requests, "http://localhost:8080/async/sql"));
         }
 
         executorService.shutdown();
