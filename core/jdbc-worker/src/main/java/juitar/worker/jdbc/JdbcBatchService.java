@@ -2,6 +2,7 @@ package juitar.worker.jdbc;
 
 import juitar.worker.queue.*;
 import org.juitar.monitoring.api.Monitored;
+import org.juitar.monitoring.api.MonitoredOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -43,7 +44,7 @@ public class JdbcBatchService {
         this.workers = workers;
     }
 
-    @Monitored(threshold = 10)
+    @Monitored(threshold = 10, operation = MonitoredOperation.COMPUTATION)
     public final void executeUpdate(String updateStatement, ResultChannel resultChannel) {
         statementQueue.add(updateStatement);
 

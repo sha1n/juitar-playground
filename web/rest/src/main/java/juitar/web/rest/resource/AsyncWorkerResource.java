@@ -5,6 +5,7 @@ import juitar.worker.queue.*;
 import junitar.server.netty.jersey.AsyncWorkerResponse;
 import junitar.server.netty.jersey.AsyncWorkerResponseBuilder;
 import org.juitar.monitoring.api.Monitored;
+import org.juitar.monitoring.api.MonitoredOperation;
 import org.springframework.context.ApplicationContext;
 
 import javax.ws.rs.*;
@@ -42,7 +43,7 @@ public class AsyncWorkerResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Monitored(threshold = 3)
+    @Monitored(threshold = 3, operation = MonitoredOperation.COMPUTATION)
     public AsyncWorkerResponse get() {
         Work work = new Work(UUID.randomUUID().toString(), "Work Item", new ResultChannel() {
             @Override
