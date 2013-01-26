@@ -1,7 +1,7 @@
 package juitar.worker.jdbc;
 
-import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.*;
+import org.juitar.monitoring.api.Monitored;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

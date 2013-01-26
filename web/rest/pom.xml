@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>web</artifactId>
-        <groupId>juitar</groupId>
+        <groupId>org.juitar</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -17,24 +17,24 @@
             <artifactId>jersey-server</artifactId>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>jdbc-worker</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>worker-queue</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>netty-jersey-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
-            <artifactId>monitors</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.juitar.monitoring</groupId>
+            <artifactId>juitar-monitoring-api</artifactId>
+            <version>1.0</version>
         </dependency>
 
     </dependencies>

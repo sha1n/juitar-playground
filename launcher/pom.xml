@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>juitar</artifactId>
-        <groupId>juitar</groupId>
+        <artifactId>juitar-playground</artifactId>
+        <groupId>org.juitar</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -38,27 +38,27 @@
         </dependency>
 
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>netty-server</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>netty-jersey-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>rest</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
-            <artifactId>monitors</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.juitar.monitoring</groupId>
+            <artifactId>juitar-monitoring-aspects</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>juitar</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>jdbc-worker</artifactId>
             <version>${project.version}</version>
         </dependency>

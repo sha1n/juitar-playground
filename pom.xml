@@ -4,10 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>juitar</groupId>
-    <artifactId>juitar</artifactId>
+    <groupId>org.juitar</groupId>
+    <artifactId>juitar-playground</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
+
+    <modules>
+        <module>infra</module>
+        <module>core</module>
+        <module>web</module>
+        <module>launcher</module>
+    </modules>
 
     <properties>
         <aspectj.version>1.7.1</aspectj.version>
@@ -40,81 +47,57 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>${project.build.source}</source>
+                    <target>${project.build.target}</target>
+                    <complianceLevel>${project.build.source}</complianceLevel>
+                    <Xlint>ignore</Xlint>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <aspectLibraries>
+                        <aspectLibrary>
+                            <groupId>org.juitar.monitoring</groupId>
+                            <artifactId>juitar-monitoring-aspects</artifactId>
+                        </aspectLibrary>
+                    </aspectLibraries>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>infra</id>
-            <modules>
-                <module>infra</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>application</id>
-
-            <modules>
-                <module>core</module>
-                <module>web</module>
-                <module>launcher</module>
-
-            </modules>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>aspectj-maven-plugin</artifactId>
-                        <version>1.4</version>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <source>${project.build.source}</source>
-                            <target>${project.build.target}</target>
-                            <complianceLevel>${project.build.source}</complianceLevel>
-                            <Xlint>ignore</Xlint>
-                            <showWeaveInfo>true</showWeaveInfo>
-                            <aspectLibraries>
-                                <aspectLibrary>
-                                    <groupId>juitar</groupId>
-                                    <artifactId>monitors</artifactId>
-                                </aspectLibrary>
-                            </aspectLibraries>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.aspectj</groupId>
-                                <artifactId>aspectjrt</artifactId>
-                                <version>${aspectj.version}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.aspectj</groupId>
-                                <artifactId>aspectjtools</artifactId>
-                                <version>${aspectj.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>compile</goal>
-                                    <goal>test-compile</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                </plugins>
-            </build>
-
-            <dependencies>
-                <dependency>
-                    <groupId>juitar</groupId>
-                    <artifactId>monitors</artifactId>
-                    <version>${project.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
+    <dependencies>
+        <dependency>
+            <groupId>org.juitar.monitoring</groupId>
+            <artifactId>juitar-monitoring-aspects</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
  * @author sha1n
  * Date: 1/4/13
  */
-public class ContextAccess {
+public class ContextAccess implements org.juitar.monitoring.spi.ContextAccess {
 
     private static ApplicationContext applicationContext = null;
 
@@ -15,6 +15,9 @@ public class ContextAccess {
             throw new UnsupportedOperationException("Context already set.");
         }
         ContextAccess.applicationContext = applicationContext;
+    }
+
+    public ContextAccess() {
     }
 
     public static ApplicationContext getApplicationContext() {
@@ -28,7 +31,7 @@ public class ContextAccess {
         }
     };
 
-    public Context getContext() {
+    public org.juitar.monitoring.spi.Context get() {
         return localContext.get();
     }
 }

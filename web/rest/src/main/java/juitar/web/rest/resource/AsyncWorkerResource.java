@@ -1,10 +1,10 @@
 package juitar.web.rest.resource;
 
 import juitar.context.ContextAccess;
-import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.*;
 import junitar.server.netty.jersey.AsyncWorkerResponse;
 import junitar.server.netty.jersey.AsyncWorkerResponseBuilder;
+import org.juitar.monitoring.api.Monitored;
 import org.springframework.context.ApplicationContext;
 
 import javax.ws.rs.*;

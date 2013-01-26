@@ -1,9 +1,9 @@
 package juitar.worker.jdbc;
 
-import juitar.monitoring.api.Monitored;
 import juitar.worker.queue.Result;
 import juitar.worker.queue.Work;
 import juitar.worker.queue.Worker;
+import org.juitar.monitoring.api.Monitored;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -18,7 +18,7 @@ public class JdbcBatchWorker implements Worker {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Monitored(threshold = 3)
+    @Monitored(threshold = 10)
     @Override
     public Result doWork(Work work) {
 
