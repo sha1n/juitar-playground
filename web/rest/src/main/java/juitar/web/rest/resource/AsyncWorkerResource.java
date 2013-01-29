@@ -1,6 +1,7 @@
 package juitar.web.rest.resource;
 
 import juitar.context.ContextAccess;
+import juitar.monitoring.spi.config.MonitoredCategory;
 import juitar.worker.queue.*;
 import junitar.server.netty.jersey.AsyncWorkerResponse;
 import junitar.server.netty.jersey.AsyncWorkerResponseBuilder;
@@ -42,7 +43,7 @@ public class AsyncWorkerResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Monitored(threshold = 3)
+    @Monitored(threshold = 3, category = MonitoredCategory.REST)
     public AsyncWorkerResponse get() {
         Work work = new Work(UUID.randomUUID().toString(), "Work Item", new ResultChannel() {
             @Override

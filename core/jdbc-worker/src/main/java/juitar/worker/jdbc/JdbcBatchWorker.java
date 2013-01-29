@@ -1,5 +1,7 @@
 package juitar.worker.jdbc;
 
+import juitar.monitoring.spi.config.MonitoredCategory;
+import juitar.monitoring.spi.config.MonitoredOperation;
 import juitar.worker.queue.Result;
 import juitar.worker.queue.Work;
 import juitar.worker.queue.Worker;
@@ -18,7 +20,7 @@ public class JdbcBatchWorker implements Worker {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Monitored(threshold = 10)
+    @Monitored(threshold = 10, category = MonitoredCategory.DAL, operation = MonitoredOperation.DATABASE_ACCESS)
     @Override
     public Result doWork(Work work) {
 

@@ -10,11 +10,42 @@ import org.juitar.monitoring.spi.config.MonitorConfigurationProvider;
 public class MonitorConfigurationProviderImpl implements MonitorConfigurationProvider {
 
     @Override
-    public MonitorConfiguration getMonitorConfiguration(String s) {
+    public MonitorConfiguration getDomainConfiguration(String s) {
+        return getEnabledMonitorConfig();
+    }
+
+    @Override
+    public MonitorConfiguration getCategoryConfiguration(String s) {
+        return getEnabledMonitorConfig();
+
+    }
+
+    @Override
+    public MonitorConfiguration getOperationConfiguration(String s) {
+        return getEnabledMonitorConfig();
+
+    }
+
+    @Override
+    public MonitorConfiguration getDefaultConfiguration() {
+        return getDisabledMonitorConfig();
+
+    }
+
+    private MonitorConfiguration getEnabledMonitorConfig() {
         return new MonitorConfiguration() {
             @Override
             public boolean isEnabled() {
                 return true;
+            }
+        };
+    }
+
+    private MonitorConfiguration getDisabledMonitorConfig() {
+        return new MonitorConfiguration() {
+            @Override
+            public boolean isEnabled() {
+                return false;
             }
         };
     }

@@ -1,6 +1,5 @@
 package juitar.context;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -13,7 +12,7 @@ import javax.annotation.PreDestroy;
 class ContextAccessInitializer implements ApplicationContextAware {
 
     @Override
-    public final void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public final void setApplicationContext(ApplicationContext applicationContext) {
         ContextAccess.setApplicationContext(applicationContext);
     }
 
