@@ -22,7 +22,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.juitar.monitoring</groupId>
+            <groupId>org.juitar</groupId>
             <artifactId>juitar-monitoring-api</artifactId>
             <version>1.0</version>
         </dependency>
