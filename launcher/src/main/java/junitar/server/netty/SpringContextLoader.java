@@ -11,9 +11,9 @@ import java.io.IOException;
  * @author sha1n
  * Date: 1/24/13
  */
-class SpringContextLoader {
+public class SpringContextLoader {
 
-    GenericApplicationContext load() throws IOException {
+    public GenericApplicationContext load() throws IOException {
         PathMatchingResourcePatternResolver pmrl = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
         Resource[] resources = pmrl.getResources("classpath*:META-INF/*-context.xml");
 
