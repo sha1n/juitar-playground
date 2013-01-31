@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.PostConstruct;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author sha1n
@@ -28,7 +26,6 @@ public class JdbcBatchService {
 
     private WorkerQueueService workerQueueService;
     private int workers = Runtime.getRuntime().availableProcessors();
-    private Queue<String> statementQueue = new ConcurrentLinkedQueue<>();
 
     @Autowired
     public JdbcBatchService(WorkQueue queue) {
@@ -47,11 +44,7 @@ public class JdbcBatchService {
 
     @Monitored(threshold = 10, category = MonitoredCategory.DAL, operation = MonitoredOperation.COMPUTATION)
     public final void executeUpdate(String updateStatement, ResultChannel resultChannel) {
-        statementQueue.add(updateStatement);
-
-        if (statementQueue.size() >= 10) {
-            queue.submit(new Work(queue.getId(), statementQueue.toArray(new String[statementQueue.size()]), resultChannel));
-        }
+        queue.submit(new Work(queue.getId(), new String[]{updateStatement}, resultChannel));
     }
 
 }

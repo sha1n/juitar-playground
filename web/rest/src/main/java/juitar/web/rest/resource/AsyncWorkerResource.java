@@ -28,10 +28,10 @@ public class AsyncWorkerResource {
             public Worker createWorker() {
                 return new Worker() {
                     @Override
-                    public Result doWork(Work work) {
+                    public void doWork(Work work) {
                         Result result = new Result(work.getId());
                         result.setResultData("Async generated...");
-                        return result;
+                        work.getResultChannel().onSuccess(result);
                     }
                 };
             }
@@ -44,24 +44,8 @@ public class AsyncWorkerResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Monitored(threshold = 3, category = MonitoredCategory.REST)
-    public AsyncWorkerResponse get() {
-        Work work = new Work(UUID.randomUUID().toString(), "Work Item", new ResultChannel() {
-            @Override
-            public void onSuccess(Result result) {
-//                System.out.println("Result received: " + result.getResultData());
-            }
-
-            @Override
-            public void onFailure(Result result, Exception e) {
-                e.printStackTrace();
-                System.out.println("Execution failed: " + result);
-            }
-        });
-
-        AsyncWorkerResponseBuilder<String> asyncWorkerResponseBuilder = new AsyncWorkerResponseBuilder<>(QUEUE, work);
-        asyncWorkerResponseBuilder.entity("Entity");
-
-        return asyncWorkerResponseBuilder.build();
+    public String get() {
+        return "test";
     }
 
     @PUT

@@ -6,10 +6,9 @@ package juitar.worker.queue;
  */
 public class WorkerImpl implements Worker {
     @Override
-    public Result doWork(Work work) {
+    public void doWork(Work work) {
         Result result = new Result(work.getId());
         result.setResultData("data-" + work.getId());
-
-        return result;
+        work.getResultChannel().onSuccess(result);
     }
 }

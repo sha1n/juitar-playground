@@ -29,10 +29,7 @@ class ServiceBoundWorker implements Runnable {
             Work work = null;
             try {
                 work = queue.take();
-
-                Result result = worker.doWork(work);
-
-                work.getResultChannel().onSuccess(result);
+                worker.doWork(work);
             } catch (InterruptedException e) {
                 LOGGER.warn("Worker thread interrupted.", e);
                 Thread.currentThread().interrupt(); // Reset interrupted state.

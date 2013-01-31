@@ -3,9 +3,8 @@ package juitar.worker.jdbc;
 import juitar.worker.queue.Worker;
 import juitar.worker.queue.WorkerFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 /**
  * @author sha1n
@@ -13,18 +12,11 @@ import javax.annotation.PostConstruct;
  */
 public class JdbcBatchWorkerFactory implements WorkerFactory {
 
-    private JdbcTemplate jdbcTemplate;
+    private DataSource jdbcTemplate;
 
     @Required
-    public final void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    public final void setJdbcTemplate(DataSource jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @PostConstruct
-    public void init() {
-        jdbcTemplate.setQueryTimeout(1);
-        jdbcTemplate.setFetchSize(500);
-        jdbcTemplate.setMaxRows(1000);
     }
 
     @Override

@@ -6,5 +6,5 @@ package juitar.worker.queue;
  */
 public interface Worker {
 
-    Result doWork(Work work);
+    void doWork(Work work);
 }

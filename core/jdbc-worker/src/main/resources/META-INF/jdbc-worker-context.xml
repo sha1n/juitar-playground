@@ -32,7 +32,7 @@
     <bean id="jdbcBatchQueue" class="juitar.worker.queue.WorkQueueImpl"/>
     <bean id="jdbcWorkerQueueServiceRegistry" class="juitar.worker.queue.WorkerQueueServiceRegistryImpl"/>
     <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
-        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+        <property name="jdbcTemplate" ref="dataSource"/>
         <qualifier value="batchWorker"/>
     </bean>
 
