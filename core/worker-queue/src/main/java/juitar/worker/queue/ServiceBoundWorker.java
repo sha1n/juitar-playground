@@ -1,5 +1,8 @@
 package juitar.worker.queue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -7,6 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Date: 1/19/13
  */
 class ServiceBoundWorker implements Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceBoundWorker.class);
 
     private final WorkQueue queue;
     private final AtomicBoolean serviceStarted;
@@ -21,17 +26,23 @@ class ServiceBoundWorker implements Runnable {
     @Override
     public final void run() {
         while (serviceStarted.get()) {
+            Work work = null;
             try {
-                Work work = queue.take();
+                work = queue.take();
 
                 Result result = worker.doWork(work);
 
                 work.getResultChannel().onSuccess(result);
             } catch (InterruptedException e) {
-                System.out.println("Worker thread interrupted.");
+                LOGGER.warn("Worker thread interrupted.", e);
                 Thread.currentThread().interrupt(); // Reset interrupted state.
+            } catch (Exception e) {
+                LOGGER.error("Worker caught an exception", e);
+                if (work != null) {
+                    work.getResultChannel().onFailure(new Result(work.getId()), e);
+                }
             } catch (Throwable e) {
-                e.printStackTrace();
+                LOGGER.error("SEVERE: Worker caught non-java.lang.Exception type.", e);
             }
         }
     }
