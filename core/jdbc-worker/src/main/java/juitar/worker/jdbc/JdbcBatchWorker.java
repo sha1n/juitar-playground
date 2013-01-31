@@ -78,34 +78,46 @@ public class JdbcBatchWorker implements Worker {
 
         }
 
+        @Monitored(threshold = 1000)
         private void processQueue(Statement s) {
-            while (!commitQueue.isEmpty()) {
-                Work work = null;
-                try {
-                    work = commitQueue.poll();
-                    addBatch(s, work);
-                } catch (Exception e) {
-                    LOGGER.error("Worker caught an exception", e);
-                    if (work != null) {
-                        work.getResultChannel().onFailure(new Result(work.getId()), e);
+            boolean commit = false;
+            long txStart = System.currentTimeMillis();
+            try {
+                while (!commitQueue.isEmpty()) {
+                    Work work = null;
+                    try {
+                        work = commitQueue.poll();
+                        commit |= addBatch(s, work);
+                    } catch (Exception e) {
+                        LOGGER.error("Worker caught an exception", e);
+                        if (work != null) {
+                            work.getResultChannel().onFailure(new Result(work.getId()), e);
+                        }
+                    } catch (Throwable e) {
+                        LOGGER.error("SEVERE: Worker caught non-java.lang.Exception type.", e);
                     }
-                } catch (Throwable e) {
-                    LOGGER.error("SEVERE: Worker caught non-java.lang.Exception type.", e);
-                } finally {
+
+                    if (System.currentTimeMillis() - txStart > 250) {
+                        break;
+                    }
+
+                }
+            } finally {
+                if (commit) {
                     try {
                         connection.commit(); // TODO should implement a robust retry and discrete result status population.
                     } catch (SQLException e) {
                         LOGGER.error("Commit failed.");
                     }
                 }
-
             }
         }
 
         /**
          * This is a stupid implementation since the results are useless and one failure fails all with no tracking whatsoever...
          */
-        private void addBatch(Statement s, Work work) throws SQLException {
+        private boolean addBatch(Statement s, Work work) throws SQLException {
+            boolean success = false;
             if (work != null) {
                 String[] payload = (String[]) work.getPayload();
 
@@ -116,7 +128,10 @@ public class JdbcBatchWorker implements Worker {
                 Result result = new Result(work.getId());
                 result.setResultData("batch added");
                 work.getResultChannel().onSuccess(result);
+
+                success = true;
             }
+            return success;
         }
     }
 }
