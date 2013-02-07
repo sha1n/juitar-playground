@@ -38,6 +38,11 @@ public class MonitorConfigurationProviderImpl implements MonitorConfigurationPro
             public boolean isEnabled() {
                 return true;
             }
+
+            @Override
+            public long getThreshold() {
+                return 1000L;
+            }
         };
     }
 
@@ -46,6 +51,11 @@ public class MonitorConfigurationProviderImpl implements MonitorConfigurationPro
             @Override
             public boolean isEnabled() {
                 return false;
+            }
+
+            @Override
+            public long getThreshold() {
+                return 0L;
             }
         };
     }
