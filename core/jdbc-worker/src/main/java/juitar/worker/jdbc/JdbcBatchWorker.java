@@ -67,22 +67,14 @@ public class JdbcBatchWorker implements Worker {
         @Override
         public void run() {
             obtainConnection();
-            Statement s;
-            try {
-                s = connection.createStatement();
-                processQueue(s);
-            } catch (SQLException e) {
-                LOGGER.error("Failed to create statement", e);
-            }
-
-
+            processQueue();
         }
 
         @Monitored(threshold = 1000)
-        private void processQueue(Statement s) {
+        private void processQueue() {
             boolean commit = false;
             long txStart = System.currentTimeMillis();
-            try {
+            try (Statement s = connection.createStatement();) {
                 while (!commitQueue.isEmpty()) {
                     Work work = null;
                     try {
@@ -102,6 +94,8 @@ public class JdbcBatchWorker implements Worker {
                     }
 
                 }
+            } catch (SQLException e) {
+                LOGGER.error("Failed to process database operation.", e);
             } finally {
                 if (commit) {
                     try {
