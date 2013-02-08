@@ -1,10 +1,7 @@
 package junitar.server.netty.jersey;
 
 import com.sun.jersey.api.JResponse;
-import juitar.worker.queue.Result;
-import juitar.worker.queue.ResultChannel;
-import juitar.worker.queue.Work;
-import juitar.worker.queue.WorkQueue;
+import org.juitar.workerq.*;
 
 /**
  * @author sha1n
@@ -28,16 +25,16 @@ public class AsyncWorkerResponse<E> extends JResponse {
     }
 
     final void submitWork(final AsyncCompletionCallback callback) {
-        Work callbackWorkWrapper = new Work(work.getId(), work.getPayload(), new ResultChannel() {
+        Work callbackWorkWrapper = new Work(work.getId(), work.getPayload(), new CompletionCallback() {
             @Override
             public void onSuccess(Result result) {
-                work.getResultChannel().onSuccess(result);
+                work.getCompletionCallback().onSuccess(result);
                 callback.onSuccess();
             }
 
             @Override
-            public void onFailure(Result result, Exception e) {
-                work.getResultChannel().onFailure(result, e);
+            public void onFailure(Result result, Exception e, CompletionStatus status) {
+                work.getCompletionCallback().onFailure(result, e, status);
                 callback.onFailure();
             }
         });

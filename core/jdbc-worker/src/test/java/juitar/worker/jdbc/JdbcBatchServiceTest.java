@@ -1,7 +1,8 @@
 package juitar.worker.jdbc;
 
-import juitar.worker.queue.Result;
-import juitar.worker.queue.ResultChannel;
+import org.juitar.workerq.CompletionCallback;
+import org.juitar.workerq.CompletionStatus;
+import org.juitar.workerq.Result;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class JdbcBatchServiceTest {
         final AtomicReference<String> value = new AtomicReference<>();
 
         for (int i = 0; i < 10; i++) {
-            service.executeUpdate("INSERT INTO TEST VALUES (1, 'str')", new ResultChannel() {
+            service.executeUpdate("INSERT INTO TEST VALUES (1, 'str')", new CompletionCallback() {
                 @Override
                 public void onSuccess(Result result) {
                     value.set(result.getWorkId());
@@ -38,7 +39,7 @@ public class JdbcBatchServiceTest {
                 }
 
                 @Override
-                public void onFailure(Result result, Exception e) {
+                public void onFailure(Result result, Exception e, CompletionStatus status) {
                     e.printStackTrace();
                     synchronized (lock) {
                         lock.notifyAll();

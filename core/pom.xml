@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>worker-queue</module>
         <module>jdbc-worker</module>
     </modules>
 

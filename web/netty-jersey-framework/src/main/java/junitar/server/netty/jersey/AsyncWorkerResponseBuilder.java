@@ -1,8 +1,8 @@
 package junitar.server.netty.jersey;
 
 import com.sun.jersey.api.JResponse;
-import juitar.worker.queue.Work;
-import juitar.worker.queue.WorkQueue;
+import org.juitar.workerq.Work;
+import org.juitar.workerq.WorkQueue;
 
 /**
  * @author sha1n

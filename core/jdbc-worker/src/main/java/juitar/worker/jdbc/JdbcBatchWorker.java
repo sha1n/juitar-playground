@@ -2,10 +2,11 @@ package juitar.worker.jdbc;
 
 import juitar.monitoring.spi.config.MonitoredCategory;
 import juitar.monitoring.spi.config.MonitoredOperation;
-import juitar.worker.queue.Result;
-import juitar.worker.queue.Work;
-import juitar.worker.queue.Worker;
 import org.juitar.monitoring.api.Monitored;
+import org.juitar.workerq.CompletionStatus;
+import org.juitar.workerq.Result;
+import org.juitar.workerq.Work;
+import org.juitar.workerq.Worker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,7 +84,7 @@ public class JdbcBatchWorker implements Worker {
                     } catch (Exception e) {
                         LOGGER.error("Worker caught an exception", e);
                         if (work != null) {
-                            work.getResultChannel().onFailure(new Result(work.getId()), e);
+                            work.getCompletionCallback().onFailure(new Result(work.getId()), e, CompletionStatus.ERROR);
                         }
                     } catch (Throwable e) {
                         LOGGER.error("SEVERE: Worker caught non-java.lang.Exception type.", e);
@@ -121,7 +122,7 @@ public class JdbcBatchWorker implements Worker {
 
                 Result result = new Result(work.getId());
                 result.setResultData("batch added");
-                work.getResultChannel().onSuccess(result);
+                work.getCompletionCallback().onSuccess(result);
 
                 success = true;
             }

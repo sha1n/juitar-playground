@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -29,8 +30,8 @@
     <!--<property name="maxConnections" value="10"/>-->
     <!--</bean>-->
 
-    <bean id="jdbcBatchQueue" class="juitar.worker.queue.WorkQueueImpl"/>
-    <bean id="jdbcWorkerQueueServiceRegistry" class="juitar.worker.queue.WorkerQueueServiceRegistryImpl"/>
+    <bean id="jdbcBatchQueue" class="org.juitar.workerq.WorkQueueImpl"/>
+    <bean id="jdbcWorkerQueueServiceRegistry" class="org.juitar.workerq.WorkerQueueServiceRegistryImpl"/>
     <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
         <property name="jdbcTemplate" ref="dataSource"/>
         <qualifier value="batchWorker"/>

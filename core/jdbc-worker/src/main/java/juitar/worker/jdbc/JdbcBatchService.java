@@ -2,8 +2,8 @@ package juitar.worker.jdbc;
 
 import juitar.monitoring.spi.config.MonitoredCategory;
 import juitar.monitoring.spi.config.MonitoredOperation;
-import juitar.worker.queue.*;
 import org.juitar.monitoring.api.Monitored;
+import org.juitar.workerq.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -43,8 +43,8 @@ public class JdbcBatchService {
     }
 
     @Monitored(threshold = 10, category = MonitoredCategory.DAL, operation = MonitoredOperation.COMPUTATION)
-    public final void executeUpdate(String updateStatement, ResultChannel resultChannel) {
-        queue.submit(new Work(queue.getId(), new String[]{updateStatement}, resultChannel));
+    public final void executeUpdate(String updateStatement, CompletionCallback completionCallback) {
+        queue.submit(new Work(queue.getId(), new String[]{updateStatement}, completionCallback));
     }
 
 }

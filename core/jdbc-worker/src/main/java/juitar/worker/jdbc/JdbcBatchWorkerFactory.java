@@ -1,7 +1,7 @@
 package juitar.worker.jdbc;
 
-import juitar.worker.queue.Worker;
-import juitar.worker.queue.WorkerFactory;
+import org.juitar.workerq.Worker;
+import org.juitar.workerq.WorkerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import javax.sql.DataSource;
