@@ -19,7 +19,7 @@ import java.util.UUID;
 @Path("/async")
 public class AsyncWorkerResource {
 
-    private static final WorkQueue QUEUE = new WorkQueueImpl();
+    private static final WorkQueue QUEUE = new BlockingWorkQueue();
     private static final WorkerQueueServiceRegistryImpl workerQueueServiceReg = new WorkerQueueServiceRegistryImpl();
 
     static {

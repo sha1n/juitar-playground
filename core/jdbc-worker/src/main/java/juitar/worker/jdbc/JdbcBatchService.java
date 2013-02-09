@@ -44,7 +44,7 @@ public class JdbcBatchService {
 
     @Monitored(threshold = 10, category = MonitoredCategory.DAL, operation = MonitoredOperation.COMPUTATION)
     public final void executeUpdate(String updateStatement, CompletionCallback completionCallback) {
-        queue.submit(new Work(queue.getId(), new String[]{updateStatement}, completionCallback));
+        queue.add(new Work(queue.getId(), new String[]{updateStatement}, completionCallback));
     }
 
 }

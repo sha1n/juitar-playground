@@ -39,7 +39,7 @@ public class AsyncWorkerResponse<E> extends JResponse {
             }
         });
 
-        workQueue.submit(callbackWorkWrapper);
+        workQueue.add(callbackWorkWrapper);
     }
 
 }

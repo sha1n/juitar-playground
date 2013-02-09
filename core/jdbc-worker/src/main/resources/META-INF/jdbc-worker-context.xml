@@ -30,7 +30,7 @@
     <!--<property name="maxConnections" value="10"/>-->
     <!--</bean>-->
 
-    <bean id="jdbcBatchQueue" class="org.juitar.workerq.WorkQueueImpl"/>
+    <bean id="jdbcBatchQueue" class="org.juitar.workerq.BlockingWorkQueue"/>
     <bean id="jdbcWorkerQueueServiceRegistry" class="org.juitar.workerq.WorkerQueueServiceRegistryImpl"/>
     <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
         <property name="jdbcTemplate" ref="dataSource"/>
