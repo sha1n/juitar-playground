@@ -1,10 +1,9 @@
-package juitar.sever.netty;
+package juitar.server.netty;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import junitar.server.netty.NettySpringContainer;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

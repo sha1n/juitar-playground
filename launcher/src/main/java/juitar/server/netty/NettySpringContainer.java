@@ -1,8 +1,10 @@
-package junitar.server.netty;
+package juitar.server.netty;
 
 import com.sun.jersey.api.container.ContainerFactory;
 import com.sun.jersey.api.core.PackagesResourceConfig;
 import com.sun.jersey.api.core.ResourceConfig;
+import juitar.spring.SpringContextLoader;
+import junitar.server.netty.NettyServer;
 import junitar.server.netty.jersey.HttpChannelPipelineFactory;
 import junitar.server.netty.jersey.NettyJerseyHandler;
 import org.jboss.netty.channel.ChannelPipelineFactory;
@@ -19,7 +21,7 @@ import java.util.Map;
  * Date: 1/25/13
  */
 @ManagedResource(objectName = "juitar:name=container")
-public class NettySpringContainer {
+class NettySpringContainer {
 
     private GenericApplicationContext applicationContext;
     private NettyServer nettyServer;

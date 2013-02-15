@@ -1,4 +1,4 @@
-package junitar.server.netty;
+package juitar.server.netty;
 
 import java.io.IOException;
 
