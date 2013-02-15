@@ -2,6 +2,8 @@ package org.juitar.commons.exception;
 
 import org.juitar.commons.l10n.Msg;
 
+import java.util.Locale;
+
 /**
  * @author sha1n
  * Date: 2/15/13
@@ -22,11 +24,11 @@ public class LocalizableRuntimeException extends RuntimeException {
 
     @Override
     public final String getLocalizedMessage() {
-        return msg.getString();
+        return msg.getLocalizedString();
     }
 
     @Override
     public final String getMessage() {
-        return msg.getString();
+        return msg.getLocalizedString(Locale.ENGLISH);
     }
 }

@@ -10,12 +10,10 @@ import java.util.Locale;
  */
 public class TestMsg extends Msg {
 
+    public static final String RESOURCE_NAME = "META-INF/l10n/test_error";
+
     public TestMsg(String key, Locale locale) {
-        super(key, "META-INF/l10n/test_error", locale);
+        super(key, RESOURCE_NAME, locale);
     }
 
-    @Override
-    protected final String getResourceName() {
-        return "META-INF/l10n/test_error";
-    }
 }

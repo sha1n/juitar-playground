@@ -7,34 +7,39 @@ import java.util.*;
  * @author sha1n
  * Date: 2/15/13
  */
-public abstract class Msg {
+public class Msg {
 
-    private final ResourceBundle bundle;
+    public static Msg get(String key, String resourceName, Locale locale) {
+        return new Msg(key, resourceName, locale);
+    }
+
     private final String resourceName;
     private final String key;
     private List<Object> args = Collections.emptyList();
+    private final Locale locale;
 
     protected Msg(String key, String resourceName, Locale locale) {
         this.key = key;
         this.resourceName = resourceName;
-        this.bundle = ResourceBundle.getBundle(resourceName, locale);
+        this.locale = locale;
     }
 
-    public final String getString() {
+    public final String getLocalizedString() {
         String msg;
         if (args.isEmpty()) {
-            msg = bundle.getString(key);
+            msg = getBundle(locale).getString(key);
         } else {
-            msg = getFormattedMessage(bundle);
+            msg = getFormattedMessage(getBundle(locale));
         }
 
         return msg;
     }
 
-    public final String getString(Locale locale) {
+    public final String getLocalizedString(Locale locale) {
         String msg;
+        ResourceBundle bundle = getBundle(locale);
         if (bundle.getLocale().equals(locale)) {
-            msg = getString();
+            msg = getLocalizedString();
         } else {
             ResourceBundle localeResourceBundle = ResourceBundle.getBundle(resourceName, locale);
             msg = getFormattedMessage(localeResourceBundle);
@@ -53,8 +58,6 @@ public abstract class Msg {
         return this;
     }
 
-    protected abstract String getResourceName();
-
     private String getFormattedMessage(ResourceBundle bundle) {
         String msg;
         if (args.isEmpty()) {
@@ -72,6 +75,10 @@ public abstract class Msg {
         }
 
         args.add(arg);
+    }
+
+    protected final ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle(resourceName, locale);
     }
 
 }

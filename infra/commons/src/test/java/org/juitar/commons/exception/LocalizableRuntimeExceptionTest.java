@@ -1,5 +1,6 @@
 package org.juitar.commons.exception;
 
+import org.juitar.commons.l10n.Msg;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,9 +12,12 @@ import java.util.Locale;
  */
 public class LocalizableRuntimeExceptionTest {
 
+    public static final String RESOURCE_NAME = "META-INF/l10n/test_error";
+
     @Test
     public void testGetLocalizedMessage() throws Exception {
-        LocalizableRuntimeException test1 = new LocalizableRuntimeException(new TestMsg("test1", Locale.ENGLISH).arg(2));
+        Msg msg = Msg.get("test1", RESOURCE_NAME, Locale.ENGLISH).arg(2);
+        LocalizableRuntimeException test1 = new LocalizableRuntimeException(msg);
 
         Assert.assertEquals("The child is 2 years old", test1.getLocalizedMessage());
 
@@ -21,7 +25,8 @@ public class LocalizableRuntimeExceptionTest {
 
     @Test
     public void testGetMessage() throws Exception {
-        LocalizableRuntimeException test1 = new LocalizableRuntimeException(new TestMsg("test1", Locale.ENGLISH).arg(2));
+        Msg msg = Msg.get("test1", RESOURCE_NAME, Locale.ENGLISH).arg(2);
+        LocalizableRuntimeException test1 = new LocalizableRuntimeException(msg);
 
         Assert.assertEquals("The child is 2 years old", test1.getMessage());
 
@@ -29,7 +34,8 @@ public class LocalizableRuntimeExceptionTest {
 
     @Test
     public void testGetLocalizedMessageNoArgs() throws Exception {
-        LocalizableRuntimeException test1 = new LocalizableRuntimeException(new TestMsg("testNoArgs", Locale.ENGLISH).arg(2));
+        Msg msg = Msg.get("testNoArgs", RESOURCE_NAME, Locale.ENGLISH);
+        LocalizableRuntimeException test1 = new LocalizableRuntimeException(msg);
 
         Assert.assertEquals("The child is young", test1.getLocalizedMessage());
 
@@ -37,7 +43,8 @@ public class LocalizableRuntimeExceptionTest {
 
     @Test
     public void testGetMessageNoArgs() throws Exception {
-        LocalizableRuntimeException test1 = new LocalizableRuntimeException(new TestMsg("testNoArgs", Locale.ENGLISH).arg(2));
+        Msg msg = Msg.get("testNoArgs", RESOURCE_NAME, Locale.ENGLISH);
+        LocalizableRuntimeException test1 = new LocalizableRuntimeException(msg);
 
         Assert.assertEquals("The child is young", test1.getMessage());
 
