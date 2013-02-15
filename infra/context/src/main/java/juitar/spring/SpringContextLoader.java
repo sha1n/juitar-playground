@@ -1,4 +1,4 @@
-package junitar.server.netty;
+package juitar.spring;
 
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
