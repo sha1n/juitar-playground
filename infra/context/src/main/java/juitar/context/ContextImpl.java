@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * @author sha1n
@@ -13,7 +12,6 @@ import java.util.UUID;
 final class ContextImpl implements Context {
 
     private static final Logger CONTEXT_LOGGER = LoggerFactory.getLogger("CONTEXT_LOGGER");
-    private String correlationId = UUID.randomUUID().toString();
     private UserContext userContext = new UserContextImpl();
     private final HashMap<String, Object> parameters = new HashMap<String, Object>();
 
@@ -35,8 +33,4 @@ final class ContextImpl implements Context {
         return CONTEXT_LOGGER;
     }
 
-    @Override
-    public String getCorrelationId() {
-        return correlationId;
-    }
 }

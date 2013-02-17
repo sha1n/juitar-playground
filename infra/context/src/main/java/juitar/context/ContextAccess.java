@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
  * @author sha1n
  * Date: 1/4/13
  */
-public class ContextAccess implements org.juitar.monitoring.spi.context.ContextAccess {
+public class ContextAccess {
 
     private static ApplicationContext applicationContext = null;
 
@@ -31,7 +31,4 @@ public class ContextAccess implements org.juitar.monitoring.spi.context.ContextA
         }
     };
 
-    public org.juitar.monitoring.spi.context.Context get() {
-        return localContext.get();
-    }
 }
