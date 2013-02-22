@@ -92,7 +92,7 @@ class TxWorkerImpl implements Runnable, TxWorker {
                 }
 
                 if (System.currentTimeMillis() - txStart > (commitInterval)) {
-                    LOGGER.info("Going to commit with non-empty queue.");
+                    LOGGER.debug("Going to commit with non-empty queue.");
                     break;
                 }
 
@@ -139,7 +139,7 @@ class TxWorkerImpl implements Runnable, TxWorker {
                 if (!workList.isEmpty()) {
                     connection.commit(); // TODO should implement a robust retry and discrete result status population.
                     reportTxSuccess();
-                    LOGGER.info("Committed " + workList.size() + " logical transactions");
+                    LOGGER.debug("Committed %d logical transactions", workList.size());
                 }
             } catch (SQLException e) {
                 reportTxFailure(e);
