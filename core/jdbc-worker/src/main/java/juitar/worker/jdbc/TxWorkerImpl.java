@@ -14,16 +14,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sha1n
  * Date: 2/22/13
  */
-class DatabaseTxWorker implements Runnable, TxWorker {
+class TxWorkerImpl implements Runnable, TxWorker {
 
-    private static AtomicInteger NAME_INDEX = new AtomicInteger(0);
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseTxWorker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TxWorkerImpl.class);
 
     private int index;
     private Queue<Work> txQueue;

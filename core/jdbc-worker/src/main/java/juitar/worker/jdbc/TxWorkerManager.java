@@ -25,15 +25,15 @@ public class TxWorkerManager {
     private DataSource dataSource;
     private int commitInterval = 100;
     private int workers = 1;
-    private DatabaseTxWorker[] txWorkers;
+    private TxWorkerImpl[] txWorkers;
 
 
     @PostConstruct
     public void init() {
         this.commitScheduler = Executors.newScheduledThreadPool(workers);
-        this.txWorkers = new DatabaseTxWorker[workers];
+        this.txWorkers = new TxWorkerImpl[workers];
         for (int i = 0; i < workers; i++) {
-            DatabaseTxWorker worker = new DatabaseTxWorker();
+            TxWorkerImpl worker = new TxWorkerImpl();
             worker.setDataSource(dataSource);
             worker.setCommitInterval(commitInterval);
             worker.setTxQueue(txQueue);
