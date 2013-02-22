@@ -33,13 +33,18 @@
     <bean id="jdbcBatchQueue" class="org.juitar.workerq.BlockingWorkQueue"/>
     <bean id="jdbcWorkerQueueServiceRegistry" class="org.juitar.workerq.WorkerQueueServiceRegistryImpl"/>
     <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
-        <property name="jdbcTemplate" ref="dataSource"/>
+        <property name="txManager" ref="dbTransactionManager"/>
         <qualifier value="batchWorker"/>
     </bean>
 
     <bean id="jdbcBatchService" class="juitar.worker.jdbc.JdbcBatchService">
         <constructor-arg ref="jdbcBatchQueue"/>
         <property name="workers" value="2"/>
+    </bean>
+
+    <bean id="dbTransactionManager" class="juitar.worker.jdbc.DatabaseTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="commitInterval" value="50"/>
     </bean>
 
     <jdbc:embedded-database id="dataSource" type="HSQL">
