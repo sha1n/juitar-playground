@@ -6,6 +6,6 @@ import org.juitar.workerq.Work;
  * @author sha1n
  * Date: 2/22/13
  */
-public interface TransactionManager {
+public interface TxWorker {
     void addTxWork(Work work);
 }

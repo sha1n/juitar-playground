@@ -12,9 +12,9 @@ import org.juitar.workerq.Worker;
  */
 public class JdbcBatchWorker implements Worker {
 
-    private TransactionManager txManager;
+    private TxWorker txManager;
 
-    public JdbcBatchWorker(TransactionManager txManager) {
+    public JdbcBatchWorker(TxWorker txManager) {
         this.txManager = txManager;
     }
 

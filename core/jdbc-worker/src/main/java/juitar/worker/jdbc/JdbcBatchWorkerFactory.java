@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Required;
  */
 public class JdbcBatchWorkerFactory implements WorkerFactory {
 
-    private TransactionManager txManager;
+    private TxWorkerManager txWorkerManager;
 
     @Required
-    public final void setTxManager(TransactionManager txManager) {
-        this.txManager = txManager;
+    public final void setTxWorkerManager(TxWorkerManager txWorkerManager) {
+        this.txWorkerManager = txWorkerManager;
     }
 
     @Override
     public final Worker createWorker() {
-        return new JdbcBatchWorker(txManager);
+        return new JdbcBatchWorker(txWorkerManager.getTransactionWorker());
     }
 }

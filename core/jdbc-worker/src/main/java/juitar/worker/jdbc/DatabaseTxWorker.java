@@ -6,9 +6,7 @@ import org.juitar.workerq.Result;
 import org.juitar.workerq.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Required;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,44 +14,43 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sha1n
  * Date: 2/22/13
  */
-class DatabaseTransactionManager implements Runnable, TransactionManager {
+class DatabaseTxWorker implements Runnable, TxWorker {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseTransactionManager.class);
+    private static AtomicInteger NAME_INDEX = new AtomicInteger(0);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseTxWorker.class);
 
-    private final ScheduledExecutorService commitScheduler = Executors.newScheduledThreadPool(1);
-    private final Queue<Work> txQueue = new ConcurrentLinkedDeque<>();
-
+    private int index;
+    private Queue<Work> txQueue;
     private DataSource dataSource;
     private Connection connection;
     private int commitInterval = 100;
 
-    @PostConstruct
-    public final void start() {
-        commitScheduler.scheduleWithFixedDelay(this, 1000, commitInterval, TimeUnit.MILLISECONDS);
-        obtainConnection();
+    final void setIndex(int index) {
+        this.index = index;
     }
 
-    @Required
-    public final void setDataSource(DataSource dataSource) {
+    final void setTxQueue(Queue<Work> txQueue) {
+        this.txQueue = txQueue;
+    }
+
+    final void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public final void setCommitInterval(int commitInterval) {
+    final void setCommitInterval(int commitInterval) {
         this.commitInterval = commitInterval;
     }
 
 
     @Override
     public final void run() {
+        Thread.currentThread().setName(getClass().getSimpleName() + "-" + index);
         obtainConnection();
         processQueue();
     }
@@ -81,7 +78,7 @@ class DatabaseTransactionManager implements Runnable, TransactionManager {
         long txStart = System.currentTimeMillis();
         AccumulativeTransaction tx = new AccumulativeTransaction(connection);
         LOGGER.debug("Database Transaction started.");
-        try (Statement s = connection.createStatement();) {
+        try (Statement s = connection.createStatement()) {
             while (!txQueue.isEmpty()) {
                 Work work = null;
                 try {
