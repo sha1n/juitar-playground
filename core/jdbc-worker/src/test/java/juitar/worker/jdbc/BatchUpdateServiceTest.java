@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -22,14 +23,27 @@ public class BatchUpdateServiceTest {
 
     @Autowired
     BatchUpdateService service;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
     final Object lock = new Object();
+
+    @Test
+    public void testEmbeddedDB() {
+
+        final String updatePattern = "INSERT INTO TEST VALUES (%d, %d ,'%s', '%s')";
+        jdbcTemplate.update(String.format(updatePattern, 1, 2, "str1", "str2"));
+        Assert.assertEquals(1, jdbcTemplate.queryForInt("SELECT count(1) from TEST"));
+        jdbcTemplate.update(String.format(updatePattern, 1, 2, "str1", "str2"));
+        Assert.assertEquals(2, jdbcTemplate.queryForInt("SELECT count(1) from TEST"));
+
+    }
 
     @Test
     public void testBasic() throws InterruptedException {
         final AtomicReference<String> value = new AtomicReference<>();
 
         for (int i = 0; i < 10; i++) {
-            service.executeUpdate("INSERT INTO TEST VALUES (1, 'str')", new CompletionCallback() {
+            service.executeUpdate("INSERT INTO TEST VALUES (1, 2, 'str1', 'str2')", new CompletionCallback() {
                 @Override
                 public void onSuccess(Result result) {
                     value.set(result.getWorkId());

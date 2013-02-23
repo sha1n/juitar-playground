@@ -59,6 +59,13 @@
             <version>2.2.9</version>
             <!--<scope>test</scope>-->
         </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.6.2.1</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+
     </dependencies>
 
 </project>

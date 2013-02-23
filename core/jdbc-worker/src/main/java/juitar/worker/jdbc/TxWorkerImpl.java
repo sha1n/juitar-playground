@@ -97,6 +97,11 @@ class TxWorkerImpl implements Runnable, TxWorker {
                 }
 
             }
+
+            // Execute batch statement.
+            s.executeBatch();
+            s.close();
+
         } catch (SQLException e) {
             LOGGER.error("Failed to process database operation.", e);
         } finally {

@@ -50,8 +50,14 @@
         <property name="txWorkers" value="2"/>
     </bean>
 
-    <jdbc:embedded-database id="dataSource" type="HSQL">
+    <jdbc:embedded-database id="dataSource" type="DERBY">
         <jdbc:script location="classpath:META-INF/schema.sql"/>
     </jdbc:embedded-database>
+    <!--<bean id="dataSource" class="org.hsqldb.jdbc.JDBCPool">-->
+    <!--&lt;!&ndash;<property name="driverClassName" value="org.hsqldb.jdbcDriver" />&ndash;&gt;-->
 
+    <!--<property name="url" value="jdbc:hsqldb:file:data/images" />-->
+    <!--<property name="user" value="sa" />-->
+    <!--<property name="password" value="" />-->
+    <!--</bean>-->
 </beans>
