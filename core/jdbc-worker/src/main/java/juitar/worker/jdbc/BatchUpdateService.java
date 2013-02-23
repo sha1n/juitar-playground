@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
  * @author sha1n
  * Date: 1/20/13
  */
-public class JdbcBatchService {
+public class BatchUpdateService {
 
     private final WorkQueue queue;
 
@@ -28,7 +28,7 @@ public class JdbcBatchService {
     private int workers = Runtime.getRuntime().availableProcessors();
 
     @Autowired
-    public JdbcBatchService(WorkQueue queue) {
+    public BatchUpdateService(WorkQueue queue) {
         this.queue = queue;
     }
 

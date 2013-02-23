@@ -17,11 +17,11 @@ import java.util.concurrent.atomic.AtomicReference;
  * Date: 1/20/13
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:META-INF/jdbc-worker-context.xml", "classpath:META-INF/test-context.xml"})
-public class JdbcBatchServiceTest {
+@ContextConfiguration(locations = {"classpath:META-INF/update-worker-context.xml", "classpath:META-INF/test-context.xml"})
+public class BatchUpdateServiceTest {
 
     @Autowired
-    JdbcBatchService service;
+    BatchUpdateService service;
     final Object lock = new Object();
 
     @Test

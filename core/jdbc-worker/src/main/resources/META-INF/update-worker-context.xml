@@ -16,10 +16,6 @@
         <property name="location" value="META-INF/jdbc.properties"/>
     </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
     <!--<bean id="dataSource" class="org.postgresql.ds.PGPoolingDataSource">-->
     <!--<property name="serverName" value="${server}"/>-->
     <!--<property name="portNumber" value="${port}"/>-->
@@ -30,15 +26,21 @@
     <!--<property name="maxConnections" value="10"/>-->
     <!--</bean>-->
 
-    <bean id="jdbcBatchQueue" class="org.juitar.workerq.BlockingWorkQueue"/>
-    <bean id="jdbcWorkerQueueServiceRegistry" class="org.juitar.workerq.WorkerQueueServiceRegistryImpl"/>
-    <bean id="jdbcWorkerFactory" class="juitar.worker.jdbc.JdbcBatchWorkerFactory">
+    <bean id="batchUpdateQueue" class="org.juitar.workerq.BlockingWorkQueue"/>
+    <bean id="updateWorkerQueueServiceRegistry" class="org.juitar.workerq.WorkerQueueServiceRegistryImpl"/>
+    <bean id="updateWorkerFactory" class="juitar.worker.jdbc.UpdateWorkerFactory">
         <property name="txWorkerManager" ref="txWorkerManager"/>
+        <property name="authorizer" ref="updateAuthorizer"/>
+        <property name="validator" ref="updateValidator"/>
+        <property name="preProcessor" ref="updatePreProcessor"/>
         <qualifier value="batchWorker"/>
     </bean>
 
-    <bean id="jdbcBatchService" class="juitar.worker.jdbc.JdbcBatchService">
-        <constructor-arg ref="jdbcBatchQueue"/>
+    <bean id="updateAuthorizer" class="juitar.worker.jdbc.DummyWorkAuthorizer"/>
+    <bean id="updateValidator" class="juitar.worker.jdbc.DummyValidator"/>
+    <bean id="updatePreProcessor" class="juitar.worker.jdbc.DummyPreProcessor"/>
+    <bean id="batchUpdateService" class="juitar.worker.jdbc.BatchUpdateService">
+        <constructor-arg ref="batchUpdateQueue"/>
         <property name="workers" value="2"/>
     </bean>
 
