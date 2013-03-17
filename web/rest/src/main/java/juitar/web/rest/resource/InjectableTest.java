@@ -18,14 +18,14 @@ import javax.ws.rs.core.MediaType;
 @Path("/injectable")
 public class InjectableTest {
 
-    @CommonQuery(required = {Param.LAYOUT, Param.FILTER})
-    ResourceQuery query;
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Monitored(threshold = 3, category = MonitoredCategory.REST)
-    public String get() {
-        return query.toString();
+    public String get(
+            @CommonQuery(required = {Param.LAYOUT, Param.FILTER})
+            ResourceQuery resourceQuery) {
+
+        return resourceQuery.toString();
     }
 
 }
