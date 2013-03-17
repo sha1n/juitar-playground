@@ -1,1 +1,1 @@
-junitar.server.netty.jersey.TestInjectableProvider
+junitar.server.netty.jersey.CommonQueryInjectableProvider

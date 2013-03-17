@@ -4,7 +4,7 @@ package junitar.server.netty.jersey;
  * @author sha1n
  * Date: 3/17/13
  */
-public enum QueryParams {
+public enum Param {
     LAYOUT("layout"),
     FILTER("filter"),
     ORDER("order"),
@@ -12,7 +12,7 @@ public enum QueryParams {
 
     private final String paramName;
 
-    QueryParams(String paramName) {
+    Param(String paramName) {
         this.paramName = paramName;
     }
 

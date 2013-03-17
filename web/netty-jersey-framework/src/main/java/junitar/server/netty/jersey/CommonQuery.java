@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Query {
+public @interface CommonQuery {
 
-    QueryParams[] failIfEmpty() default {QueryParams.LAYOUT, QueryParams.FILTER};
+    Param[] required() default {Param.LAYOUT, Param.FILTER};
 }

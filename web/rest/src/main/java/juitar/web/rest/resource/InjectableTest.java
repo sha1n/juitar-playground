@@ -1,7 +1,8 @@
 package juitar.web.rest.resource;
 
 import juitar.monitoring.spi.config.MonitoredCategory;
-import junitar.server.netty.jersey.Query;
+import junitar.server.netty.jersey.CommonQuery;
+import junitar.server.netty.jersey.Param;
 import junitar.server.netty.jersey.ResourceQuery;
 import org.juitar.monitoring.api.Monitored;
 
@@ -17,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/injectable")
 public class InjectableTest {
 
-    @Query("")
+    @CommonQuery(required = {Param.LAYOUT, Param.FILTER})
     ResourceQuery query;
 
     @GET

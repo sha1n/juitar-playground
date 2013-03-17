@@ -11,18 +11,18 @@ import javax.ws.rs.ext.Provider;
  * Date: 3/17/13
  */
 @Provider
-public class TestInjectableProvider extends PerRequestTypeInjectableProvider<Query, ResourceQuery> {
+public class CommonQueryInjectableProvider extends PerRequestTypeInjectableProvider<CommonQuery, ResourceQuery> {
 
 
     /**
      * Construct a new instance with the Type
      */
-    public TestInjectableProvider() {
+    public CommonQueryInjectableProvider() {
         super(ResourceQuery.class);
     }
 
     @Override
-    public Injectable<ResourceQuery> getInjectable(ComponentContext ic, Query query) {
-        return new QueryInjectable(query);
+    public Injectable<ResourceQuery> getInjectable(ComponentContext ic, CommonQuery commonQuery) {
+        return new CommonQueryInjectable(commonQuery);
     }
 }
