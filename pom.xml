@@ -20,7 +20,7 @@
     <properties>
         <aspectj.version>1.7.1</aspectj.version>
         <jersey.version>1.9.1</jersey.version>
-        <spring.version>3.2.0.Release</spring.version>
+        <spring.version>3.2.0.RELEASE</spring.version>
 
         <project.build.source>1.7</project.build.source>
         <project.build.target>1.7</project.build.target>
