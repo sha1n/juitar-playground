@@ -1,9 +1,9 @@
 package org.juitar.vertx.jersey;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.glassfish.jersey.server.ContainerException;
 import org.glassfish.jersey.server.ContainerResponse;
 import org.glassfish.jersey.server.spi.ContainerResponseWriter;
-import org.jboss.netty.handler.codec.http.HttpResponseStatus;
 import org.vertx.java.core.buffer.Buffer;
 import org.vertx.java.core.http.HttpServerRequest;
 
@@ -33,16 +33,16 @@ class VertxContainerResponseWriter implements ContainerResponseWriter {
 
     @Override
     public OutputStream writeResponseStatusAndHeaders(long contentLength, ContainerResponse responseContext) throws ContainerException {
-        req.response.statusCode = responseContext.getStatusInfo().getStatusCode();
-        req.response.statusMessage = responseContext.getStatusInfo().getReasonPhrase();
+        req.response().setStatusCode(responseContext.getStatusInfo().getStatusCode());
+        req.response().setStatusMessage(responseContext.getStatusInfo().getReasonPhrase());
 
         MultivaluedMap<String, Object> headers = responseContext.getHeaders();
         for (String key : headers.keySet()) {
             for (Object value : headers.get(key)) {
-                req.response.putHeader(key, value);
+                req.response().putHeader(key, value.toString());
             }
         }
-        req.response.putHeader("Connection", "keep-alive");
+        req.response().putHeader("Connection", "keep-alive");
 
         return out;
     }
@@ -60,7 +60,7 @@ class VertxContainerResponseWriter implements ContainerResponseWriter {
     @Override
     public void commit() {
         if (!ended) {
-            req.response.end(new Buffer(out.toByteArray()));
+            req.response().end(new Buffer(out.toByteArray()));
         }
         ended = true;
     }
@@ -68,12 +68,12 @@ class VertxContainerResponseWriter implements ContainerResponseWriter {
     @Override
     public void failure(Throwable error) {
         if (!ended) {
-            if (req.response.statusCode == HttpResponseStatus.OK.getCode()) {
-                req.response.statusCode = HttpResponseStatus.INTERNAL_SERVER_ERROR.getCode();
-                req.response.statusMessage = HttpResponseStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+            if (req.response().getStatusCode() == HttpResponseStatus.OK.code()) {
+                req.response().setStatusCode(HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+                req.response().setStatusMessage(HttpResponseStatus.INTERNAL_SERVER_ERROR.reasonPhrase());
             }
 
-            req.response.end();
+            req.response().end();
         }
         ended = true;
     }

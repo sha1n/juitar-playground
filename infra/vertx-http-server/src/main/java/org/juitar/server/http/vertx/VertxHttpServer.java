@@ -6,6 +6,7 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.Vertx;
 import org.vertx.java.core.http.HttpServer;
 import org.vertx.java.core.http.RouteMatcher;
+import org.vertx.java.core.impl.DefaultVertx;
 
 
 /**
@@ -31,7 +32,6 @@ public class VertxHttpServer {
         }
     };
 
-    private final Vertx vertx = Vertx.newVertx();
     private final HttpServer httpServer;
     private final int port;
     private final ShutdownHook shutdownHook;
@@ -58,7 +58,7 @@ public class VertxHttpServer {
     public VertxHttpServer(final int port, final RouteMatcher routeMatcher, ShutdownHook shutdownHook) {
         this.port = port;
         this.shutdownHook = shutdownHook != null ? shutdownHook : DUMMY_SHUTDOWN_HOOK;
-        this.httpServer = vertx.createHttpServer();
+        this.httpServer = new DefaultVertx().createHttpServer();
         this.httpServer.requestHandler(routeMatcher);
     }
 

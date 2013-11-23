@@ -60,8 +60,8 @@ class VertxHandlerJerseyHandlerBridge {
 
                 ContainerRequest containerRequest = new ContainerRequest(
                         baseUri,
-                        new URI(httpServerRequest.uri),
-                        httpServerRequest.method,
+                        new URI(httpServerRequest.uri()),
+                        httpServerRequest.method(),
                         new DummySecurityContext(new DummySecurityContext.DummyPrincipal("test")), // TODO figure this out
                         properties
                 );
