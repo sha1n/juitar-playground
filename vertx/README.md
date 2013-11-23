@@ -11,9 +11,8 @@ Provides a very basic implementation to enable Jersey 2.x to work on top of a Ve
 Module: vertx-rest-sampleapp
 -----------------------------------
 This module takes the HTTP server and Jersey adapters implemented by the other two modules and implements a REST resource
- which makes use of the [worker-queue](https://github.com/sha1n/juitar-playground/tree/master/core/worker-queue) and
- [jdbc-worker](https://github.com/sha1n/juitar-playground/tree/master/core/jdbc-worker) modules implemented in repository
- [juitar-playground](https://github.com/sha1n/juitar-playground).
+ which makes use of the [worker-queue](https://github.com/sha1n/juitar-playground/tree/master/infra/worker-queue) and
+ [jdbc-worker](https://github.com/sha1n/juitar-playground/tree/master/core/jdbc-worker) modules.
 
 ### REST Async Response PUT Method Using the JDBC Worker Queue
 
