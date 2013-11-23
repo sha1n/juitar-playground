@@ -23,6 +23,12 @@
         </dependency>
         <dependency>
             <groupId>org.juitar</groupId>
+            <artifactId>worker-queue-impl</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.juitar</groupId>
             <artifactId>juitar-monitoring-api</artifactId>
             <version>1.0</version>
         </dependency>

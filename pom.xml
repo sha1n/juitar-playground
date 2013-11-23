@@ -12,8 +12,8 @@
     <modules>
         <module>infra</module>
         <module>core</module>
-        <module>web</module>
-        <module>launcher</module>
+        <module>netty</module>
+        <module>vertx</module>
         <module>test-client</module>
     </modules>
 
