@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>vertx</artifactId>
+        <groupId>org.juitar.vertx</groupId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>vertx-rest-app</artifactId>
+    <name>Vert.x Sample App</name>
+    <description>
+        Sample REST application build on top of JAX-RS with Jersey 2.0 utilizing asynchronous responses to
+        provide synchronous client experience while processing requests via worker queues.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.juitar.vertx</groupId>
+            <artifactId>sample-rest-app</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.juitar</groupId>
+            <artifactId>vertx-http-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.juitar.vertx</groupId>
+            <artifactId>jersey</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.juitar</groupId>
+            <artifactId>test-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.6.2.1</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+
+    </dependencies>
+</project>

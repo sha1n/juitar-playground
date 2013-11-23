@@ -9,8 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>org.juitar.vertx</groupId>
     <artifactId>vertx</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>jersey</module>
+        <module>sample-rest-app</module>
+        <module>sample-war</module>
+        <module>vertx-rest-app</module>
+    </modules>
 
 </project>
