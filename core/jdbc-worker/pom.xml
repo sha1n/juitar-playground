@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>org.juitar</groupId>
-            <artifactId>worker-queue</artifactId>
+            <artifactId>worker-queue-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
