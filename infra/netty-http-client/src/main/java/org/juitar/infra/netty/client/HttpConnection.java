@@ -9,9 +9,9 @@ import io.netty.channel.ChannelFuture;
  */
 public class HttpConnection {
 
+    final Channel channel;
     private final HttpConnectionPool pool;
     private final boolean keepAlive;
-    private final Channel channel;
     private boolean reading = false;
 
 
