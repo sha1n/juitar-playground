@@ -18,5 +18,6 @@
         <module>vertx-http-server</module>
         <module>commons</module>
         <module>worker-queue</module>
+        <module>netty-http-client</module>
     </modules>
 </project>
