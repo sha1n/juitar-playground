@@ -6,6 +6,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author sha1n
  * Date: 11/25/13
  */
-public class HttpConnectionPool {
+public class HttpConnectionPool implements Closeable {
 
     private final int maxSize;
     private final AtomicInteger currentConnections = new AtomicInteger(0);
@@ -26,6 +28,7 @@ public class HttpConnectionPool {
     private final Bootstrap bootstrap = new Bootstrap();
     private final String hostname;
     private final int port;
+    private volatile boolean open = true;
     private ExceptionHandler exceptionHandler;
 
     public HttpConnectionPool(int maxSize, String hostname, int port) {
@@ -39,7 +42,7 @@ public class HttpConnectionPool {
 
         if (httpConnection == null) {
             if (maxSize < currentConnections.get()) {
-                connect(connectRequest);
+                connect0(connectRequest);
             } else {
                 // TODO: either wait for a connection or reject the request
             }
@@ -47,7 +50,7 @@ public class HttpConnectionPool {
 
     }
 
-    private void init() {
+    void init() {
         bootstrap.group(new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()));
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.handler(new ChannelInitializer<Channel>() {
@@ -98,6 +101,10 @@ public class HttpConnectionPool {
         recycle(httpConnection);
     }
 
+    boolean isClosed() {
+        return !open;
+    }
+
 
     public final ExceptionHandler getExceptionHandler() {
         return exceptionHandler;
@@ -105,6 +112,14 @@ public class HttpConnectionPool {
 
     public final void setExceptionHandler(ExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
+    }
+
+    @Override
+    public void close() throws IOException {
+        open = false;
+        for (HttpConnection connection : channelToConnectionMap.values()) {
+            connection.dispose();
+        }
     }
 
     private class ChannelHandler extends ChannelDuplexHandler {

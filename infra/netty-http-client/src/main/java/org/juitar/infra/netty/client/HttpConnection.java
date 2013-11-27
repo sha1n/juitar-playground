@@ -13,6 +13,7 @@ public class HttpConnection {
     private final HttpConnectionPool pool;
     private final boolean keepAlive;
     private boolean reading = false;
+    private boolean closed;
 
 
     public HttpConnection(HttpConnectionPool pool, Channel channel, boolean keepAlive) {
@@ -67,4 +68,11 @@ public class HttpConnection {
         channel.close();
     }
 
+    public boolean isOpen() {
+        return channel.isOpen();
+    }
+
+    public boolean isClosed() {
+        return !channel.isOpen();
+    }
 }
