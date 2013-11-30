@@ -5,15 +5,13 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.util.concurrent.Future;
 
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -22,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HttpConnectionPool implements Closeable {
 
+    private NioEventLoopGroup nioEventLoopGroup;
     private final int maxSize;
     private final AtomicInteger currentConnections = new AtomicInteger(0);
     private final ConcurrentMap<Channel, HttpConnection> channelToConnectionMap = new ConcurrentHashMap<>();
@@ -46,13 +45,15 @@ public class HttpConnectionPool implements Closeable {
                 connect0(connectRequest);
             } else {
                 // TODO: either wait for a connection or reject the request
+                throw new IllegalStateException("No available connections");
             }
         }
 
     }
 
     void init() {
-        bootstrap.group(new NioEventLoopGroup(Runtime.getRuntime().availableProcessors()));
+        nioEventLoopGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors());
+        bootstrap.group(nioEventLoopGroup);
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.handler(new ChannelInitializer<Channel>() {
             @Override
@@ -108,7 +109,9 @@ public class HttpConnectionPool implements Closeable {
 
     final void recycle(Channel channel) {
         HttpConnection httpConnection = channelToConnectionMap.get(channel);
-        recycle(httpConnection);
+        if (httpConnection != null) {
+            recycle(httpConnection);
+        }
     }
 
     boolean isClosed() {
@@ -129,6 +132,16 @@ public class HttpConnectionPool implements Closeable {
         open = false;
         for (HttpConnection connection : channelToConnectionMap.values()) {
             connection.dispose();
+        }
+        Future<?> future = nioEventLoopGroup.shutdownGracefully();
+        try {
+            future.get(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
         }
     }
 

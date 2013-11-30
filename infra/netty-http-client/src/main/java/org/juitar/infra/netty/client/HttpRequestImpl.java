@@ -44,6 +44,8 @@ public class HttpRequestImpl implements HttpRequest {
                 } catch (InterruptedException e) {
                     // TODO report this
                     e.printStackTrace();
+                } finally {
+                    connection.close();
                 }
 
             }
