@@ -5,4 +5,6 @@ package org.juitar.infra.netty.client;
  * Date: 11/27/13
  */
 public interface ResponseHandler {
+
+    void handleResponse(HttpResponse httpResponse);
 }

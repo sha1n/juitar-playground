@@ -6,9 +6,14 @@ package org.juitar.infra.netty.client;
  */
 public enum HttpMethod {
 
-    POST,
-    GET,
-    PUT,
-    DELETE
+    POST(io.netty.handler.codec.http.HttpMethod.POST),
+    GET(io.netty.handler.codec.http.HttpMethod.GET),
+    PUT(io.netty.handler.codec.http.HttpMethod.PUT),
+    DELETE(io.netty.handler.codec.http.HttpMethod.DELETE);
 
+    final io.netty.handler.codec.http.HttpMethod nettyMethod;
+
+    private HttpMethod(io.netty.handler.codec.http.HttpMethod nettyMethod) {
+        this.nettyMethod = nettyMethod;
+    }
 }

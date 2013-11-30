@@ -5,4 +5,6 @@ package org.juitar.infra.netty.client;
  * Date: 11/27/13
  */
 public interface HttpRequest {
+
+    void commit();
 }

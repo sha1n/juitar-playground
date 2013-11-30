@@ -14,6 +14,7 @@ public class HttpConnection {
     private final boolean keepAlive;
     private boolean reading = false;
     private boolean closed;
+    private ResponseHandler responseHandler;
 
 
     public HttpConnection(HttpConnectionPool pool, Channel channel, boolean keepAlive) {
@@ -74,5 +75,13 @@ public class HttpConnection {
 
     public boolean isClosed() {
         return !channel.isOpen();
+    }
+
+    public void notifyReadComplete(HttpResponse httpResponse) {
+        this.responseHandler.handleResponse(httpResponse);
+    }
+
+    public void setResponseHandler(ResponseHandler responseHandler) {
+        this.responseHandler = responseHandler;
     }
 }

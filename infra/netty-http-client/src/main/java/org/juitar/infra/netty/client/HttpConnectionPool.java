@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -41,7 +42,7 @@ public class HttpConnectionPool implements Closeable {
         HttpConnection httpConnection = available.poll();
 
         if (httpConnection == null) {
-            if (maxSize < currentConnections.get()) {
+            if (maxSize > currentConnections.get()) {
                 connect0(connectRequest);
             } else {
                 // TODO: either wait for a connection or reject the request
@@ -75,14 +76,23 @@ public class HttpConnectionPool implements Closeable {
                 if (future.isSuccess()) {
                     final Channel channel = future.channel();
                     HttpConnection httpConnection = new HttpConnection(HttpConnectionPool.this, channel, true);
-                    connectRequest.connected(httpConnection);
                     currentConnections.incrementAndGet();
                     channelToConnectionMap.put(channel, httpConnection);
+
+                    connectRequest.connected(httpConnection);
                 } else {
                     connectRequest.failed(future.cause());
                 }
             }
         });
+
+        try {
+            future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     final void recycle(HttpConnection httpConnection) {
@@ -122,10 +132,44 @@ public class HttpConnectionPool implements Closeable {
         }
     }
 
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+
     private class ChannelHandler extends ChannelDuplexHandler {
 
         @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+            HttpConnection httpConnection = channelToConnectionMap.get(ctx.channel());
+            httpConnection.readNow();
+
+            if (msg instanceof io.netty.handler.codec.http.HttpResponse) {
+                HttpResponse httpResponse = new HttpResponseImpl(httpConnection, (io.netty.handler.codec.http.HttpResponse) msg);
+                httpConnection.notifyReadComplete(httpResponse);
+            }
+        }
+
+        @Override
+        public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+            HttpConnection httpConnection = channelToConnectionMap.get(ctx.channel());
+            httpConnection.readNow();
+
+        }
+
+        @Override
+        public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+            super.write(ctx, msg, promise);
+        }
+
+        @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+            cause.printStackTrace();
             if (HttpConnectionPool.this.exceptionHandler != null) {
                 HttpConnectionPool.this.exceptionHandler.handle(cause);
             }
@@ -135,6 +179,8 @@ public class HttpConnectionPool implements Closeable {
         public void channelInactive(ChannelHandlerContext ctx) throws Exception {
             HttpConnectionPool.this.recycle(ctx.channel());
         }
+
+
     }
 
 }
