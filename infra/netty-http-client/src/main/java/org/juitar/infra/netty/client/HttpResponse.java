@@ -9,4 +9,6 @@ public interface HttpResponse {
     int getStatusCode();
 
     String getStatusLine();
+
+    String getBodyAsString();
 }

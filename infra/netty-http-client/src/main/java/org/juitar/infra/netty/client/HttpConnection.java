@@ -13,14 +13,20 @@ public class HttpConnection {
     private final HttpConnectionPool pool;
     private final boolean keepAlive;
     private boolean reading = false;
-    private boolean closed;
+    private boolean closed = false;
     private ResponseHandler responseHandler;
+    private boolean notifiedHandler = false;
 
 
     public HttpConnection(HttpConnectionPool pool, Channel channel, boolean keepAlive) {
         this.pool = pool;
         this.keepAlive = keepAlive;
         this.channel = channel;
+    }
+
+    public void init(ResponseHandler responseHandler) {
+        this.responseHandler = responseHandler;
+        this.notifiedHandler = false;
     }
 
     public final ChannelFuture write(Object obj) {
@@ -53,7 +59,7 @@ public class HttpConnection {
         channel.flush();
 
         if (!keepAlive) {
-            channel.close();
+            dispose();
         } else {
             // Allow the pool to recycle the connection.
             pool.recycle(this);
@@ -67,21 +73,22 @@ public class HttpConnection {
     final void dispose() {
         channel.flush();
         channel.close();
+        closed = true;
     }
 
     public boolean isOpen() {
-        return channel.isOpen();
+        return !closed && channel.isOpen();
     }
 
     public boolean isClosed() {
-        return !channel.isOpen();
+        return closed || !channel.isOpen();
     }
 
     public void notifyReadComplete(HttpResponse httpResponse) {
-        this.responseHandler.handleResponse(httpResponse);
+        if (!notifiedHandler) {
+            notifiedHandler = true;
+            this.responseHandler.handleResponse(httpResponse);
+        }
     }
 
-    public void setResponseHandler(ResponseHandler responseHandler) {
-        this.responseHandler = responseHandler;
-    }
 }

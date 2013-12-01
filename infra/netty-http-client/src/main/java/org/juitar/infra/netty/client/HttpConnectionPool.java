@@ -5,6 +5,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpContent;
 import io.netty.util.concurrent.Future;
 
 import java.io.Closeable;
@@ -156,6 +157,9 @@ public class HttpConnectionPool implements Closeable {
 
     private class ChannelHandler extends ChannelDuplexHandler {
 
+        private HttpResponseContent content = new HttpResponseContent();
+        private HttpResponseImpl httpResponse;
+
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
@@ -163,15 +167,19 @@ public class HttpConnectionPool implements Closeable {
             httpConnection.readNow();
 
             if (msg instanceof io.netty.handler.codec.http.HttpResponse) {
-                HttpResponse httpResponse = new HttpResponseImpl(httpConnection, (io.netty.handler.codec.http.HttpResponse) msg);
-                httpConnection.notifyReadComplete(httpResponse);
+                httpResponse = new HttpResponseImpl(httpConnection, (io.netty.handler.codec.http.HttpResponse) msg);
+                httpResponse.setContent(content);
+            }
+
+            if (msg instanceof HttpContent) {
+                content.addContentPart(ClassUtil.tryCast(msg, HttpContent.class));
             }
         }
 
         @Override
         public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
             HttpConnection httpConnection = channelToConnectionMap.get(ctx.channel());
-            httpConnection.readNow();
+            httpConnection.notifyReadComplete(httpResponse);
 
         }
 

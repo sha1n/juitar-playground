@@ -22,9 +22,6 @@ public class HttpRequestImpl implements HttpRequest {
         this.uri = uri;
         this.connectionPool = connectionPool;
         this.responseHandler = responseHandler;
-        String hostname = connectionPool.getHostname();
-        int port = connectionPool.getPort();
-        String baseUrl = "http://" + hostname + ":" + port;
         this.nettyRequest = new DefaultFullHttpRequest(HttpVersion.HTTP_1_1, httpMethod.nettyMethod, uri);
     }
 
@@ -68,7 +65,7 @@ public class HttpRequestImpl implements HttpRequest {
                 public void connected(HttpConnection httpConnection) {
                     if (httpConnection.isOpen()) {
                         connection = httpConnection;
-                        connection.setResponseHandler(responseHandler);
+                        connection.init(responseHandler);
                         action.run();
                     } else {
                         // Try another one
