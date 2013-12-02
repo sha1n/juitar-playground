@@ -3,24 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>juitar-playground</artifactId>
+        <artifactId>core</artifactId>
         <groupId>org.juitar</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>core</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>feature-flags</artifactId>
 
-    <modules>
-        <module>jdbc-worker</module>
-        <module>feature-flags</module>
-    </modules>
-
-
-    <build>
-        <plugins>
-        </plugins>
-    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
