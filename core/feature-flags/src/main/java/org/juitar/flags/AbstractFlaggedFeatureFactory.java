@@ -15,7 +15,7 @@ public abstract class AbstractFlaggedFeatureFactory<T extends FlaggedFeature, A>
 
     protected AbstractFlaggedFeatureFactory(Flag flag) {
         if (flag == null) {
-            throw new IllegalArgumentException("flag is mandatory");
+            throw new IllegalArgumentException("flag cannot be null");
         }
         this.flag = flag;
     }
@@ -40,6 +40,11 @@ public abstract class AbstractFlaggedFeatureFactory<T extends FlaggedFeature, A>
         LOGGER.info("Getting feature instance for flag: " + flag.getName());
 
         return getFlaggedFeature(arg, null);
+    }
+
+    @Override
+    public final boolean isScoped() {
+        return flag.isScoped();
     }
 
     private T getFlaggedFeature(A arg, Scope scope) {

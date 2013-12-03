@@ -6,6 +6,8 @@ package org.juitar.flags;
  */
 public interface FlaggedFeatureFactory<T extends FlaggedFeature, A> {
 
+    boolean isScoped();
+
     T getInstance(A arg, Scope scope);
 
     T getInstance(A arg);

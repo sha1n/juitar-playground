@@ -37,8 +37,12 @@ public class ScopedFlag extends Flag {
 
     @Override
     public final boolean isOn(Scope scope) {
-        boolean contains = scopeSet.contains(scope);
-        return inclusive == contains; // inclusive & contains -> true, exclusive & !contains -> true
+        if (scope == null) {
+            return false;
+        } else {
+            boolean contains = scopeSet.contains(scope);
+            return inclusive == contains; // inclusive & contains -> true, exclusive & !contains -> true
+        }
     }
 
     @Override

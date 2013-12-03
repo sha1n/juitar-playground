@@ -5,13 +5,19 @@ package org.juitar.flags;
  * Date: 12/2/13
  */
 public class Scopes {
-    private static final Registry<Scope> FLAG_REGISTRY = new Registry<>();
+    private static final Registry<Scope> SCOPE_REGISTRY = new Registry<>();
+    private static final Scope NULL = new Scope("null");
 
-    public static Scope get(String scope) {
-        return FLAG_REGISTRY.get(scope);
+
+    public static Scope get(String name) {
+        return SCOPE_REGISTRY.get(name, NULL);
     }
 
-    public static void register(Scope scope) {
-        FLAG_REGISTRY.register(scope);
+    public static Scope register(Scope scope) {
+        return SCOPE_REGISTRY.register(scope);
+    }
+
+    public static Scope register(String scope) {
+        return SCOPE_REGISTRY.register(new Scope(scope));
     }
 }
