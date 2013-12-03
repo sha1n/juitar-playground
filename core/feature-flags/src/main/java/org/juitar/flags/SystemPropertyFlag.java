@@ -11,13 +11,17 @@ public class SystemPropertyFlag extends Flag {
         super(name);
     }
 
+    protected SystemPropertyFlag(String name, FlagGroup group) {
+        super(name, group);
+    }
+
     @Override
-    public boolean isOn() {
+    protected final boolean isFlagOn() {
         return System.getProperty(id) != null;
     }
 
     @Override
-    public boolean isOn(Scope scope) {
+    protected final boolean isFlagOn(Scope scope) {
         return isOn();
     }
 

@@ -13,13 +13,19 @@ public class SimpleFlag extends Flag {
         this.on = on;
     }
 
+    public SimpleFlag(String name, FlagGroup group, boolean on) {
+        super(name, group);
+        this.on = on;
+    }
+
+
     @Override
-    public final boolean isOn(Scope scope) {
+    protected final boolean isFlagOn(Scope scope) {
         return on;
     }
 
     @Override
-    public final boolean isOn() {
+    protected final boolean isFlagOn() {
         return on;
     }
 

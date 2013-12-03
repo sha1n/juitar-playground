@@ -6,9 +6,17 @@ package org.juitar.flags;
  */
 public abstract class Flag extends Identified {
 
+    private final FlagGroup group;
+
     protected Flag(String name) {
-        super(name);
+        this(name, NullFlagGroup.NULL_FLAG_GROUP);
     }
+
+    protected Flag(String name, FlagGroup group) {
+        super(name);
+        this.group = group;
+    }
+
 
     public final String getName() {
         return id;
@@ -19,9 +27,17 @@ public abstract class Flag extends Identified {
         return "flag:" + id;
     }
 
-    public abstract boolean isOn();
+    public final boolean isOn() {
+        return group.isOn() && isFlagOn();
+    }
 
-    public abstract boolean isOn(Scope scope);
+    public final boolean isOn(Scope scope) {
+        return group.isOn() && isFlagOn(scope);
+    }
+
+    protected abstract boolean isFlagOn();
+
+    protected abstract boolean isFlagOn(Scope scope);
 
     public abstract boolean isScoped();
 }

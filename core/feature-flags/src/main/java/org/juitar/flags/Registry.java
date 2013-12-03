@@ -33,4 +33,5 @@ class Registry<T extends Identified> {
         registry.put(object.id, object);
         return object;
     }
+
 }

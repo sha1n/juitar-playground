@@ -27,6 +27,12 @@ public class ScopedFlag extends Flag {
         this.inclusive = inclusive;
     }
 
+    public ScopedFlag(String name, FlagGroup group, Set<Scope> scopeSet, boolean inclusive) {
+        super(name, group);
+        this.scopeSet = scopeSet;
+        this.inclusive = inclusive;
+    }
+
     public ScopedFlag(String name, boolean inclusive) {
         this(name, Collections.synchronizedSet(new HashSet<Scope>()), inclusive);
     }
@@ -36,7 +42,7 @@ public class ScopedFlag extends Flag {
     }
 
     @Override
-    public final boolean isOn(Scope scope) {
+    protected final boolean isFlagOn(Scope scope) {
         if (scope == null) {
             return false;
         } else {
@@ -46,7 +52,7 @@ public class ScopedFlag extends Flag {
     }
 
     @Override
-    public final boolean isOn() {
+    protected final boolean isFlagOn() {
         return false;
     }
 
