@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>l10n</module>
         <module>context</module>
         <module>netty-server</module>
         <module>vertx-http-server</module>
