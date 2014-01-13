@@ -8,7 +8,6 @@ import junitar.server.netty.NettyServer;
 import junitar.server.netty.jersey.HttpChannelPipelineFactory;
 import junitar.server.netty.jersey.NettyJerseyHandler;
 import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.juitar.flags.xml.Loader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
@@ -42,7 +41,6 @@ class NettySpringContainer {
             initNettyServer();
 
             applicationContext.start();
-            Loader.loadFlags(Launcher.class.getResourceAsStream("/flags.xml"));
             nettyServer.start();
 
             return new Started();
