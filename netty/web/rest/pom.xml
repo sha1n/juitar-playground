@@ -36,10 +36,5 @@
             <artifactId>juitar-monitoring-api</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.juitar</groupId>
-            <artifactId>feature-flags</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

@@ -14,7 +14,6 @@
 
     <modules>
         <module>jdbc-worker</module>
-        <module>feature-flags</module>
     </modules>
 
 
