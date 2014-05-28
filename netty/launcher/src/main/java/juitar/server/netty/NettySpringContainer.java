@@ -27,6 +27,38 @@ class NettySpringContainer {
     private NettyServer nettyServer;
     private volatile State state = new Stopped();
 
+    @ManagedOperation(description = "Starts the container")
+    public final void start() throws IOException {
+        state = state.start();
+    }
+
+    @ManagedOperation(description = "Stops the container")
+    public void stop() {
+        state = state.stop();
+    }
+
+    private void initApplicationContext() throws IOException {
+        applicationContext = new SpringContextLoader().load();
+        applicationContext.refresh();
+    }
+
+    private void initNettyServer() {
+        final Map<String, Object> props = new HashMap<>();
+        props.put(PackagesResourceConfig.PROPERTY_PACKAGES,
+                new String[]{
+                        "juitar.web.rest.resource",
+                        "org.juitar.web.rest.resource"
+                }
+        );
+        props.put(NettyJerseyHandler.RESOURCE_CONFIG_BASE_URI, "/api");
+        ResourceConfig resourceConfig = new PackagesResourceConfig(props);
+
+        NettyJerseyHandler jerseyHandler = ContainerFactory.createContainer(NettyJerseyHandler.class, resourceConfig);
+        ChannelPipelineFactory channelPipelineFactory = new HttpChannelPipelineFactory(jerseyHandler);
+
+        nettyServer = new NettyServer(channelPipelineFactory, 8080);
+    }
+
     interface State {
         State start() throws IOException;
 
@@ -72,33 +104,6 @@ class NettySpringContainer {
 
             return state;
         }
-    }
-
-    @ManagedOperation(description = "Starts the container")
-    public final void start() throws IOException {
-        state = state.start();
-    }
-
-    @ManagedOperation(description = "Stops the container")
-    public void stop() {
-        state = state.stop();
-    }
-
-    private void initApplicationContext() throws IOException {
-        applicationContext = new SpringContextLoader().load();
-        applicationContext.refresh();
-    }
-
-    private void initNettyServer() {
-        final Map<String, Object> props = new HashMap<>();
-        props.put(PackagesResourceConfig.PROPERTY_PACKAGES, new String[]{"juitar.web.rest.resource"});
-        props.put(NettyJerseyHandler.RESOURCE_CONFIG_BASE_URI, "/api");
-        ResourceConfig resourceConfig = new PackagesResourceConfig(props);
-
-        NettyJerseyHandler jerseyHandler = ContainerFactory.createContainer(NettyJerseyHandler.class, resourceConfig);
-        ChannelPipelineFactory channelPipelineFactory = new HttpChannelPipelineFactory(jerseyHandler);
-
-        nettyServer = new NettyServer(channelPipelineFactory, 8080);
     }
 
 }
