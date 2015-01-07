@@ -15,6 +15,7 @@
         <module>core</module>
         <module>netty</module>
         <module>vertx</module>
+        <module>chaos-donkey</module>
     </modules>
 
     <properties>
